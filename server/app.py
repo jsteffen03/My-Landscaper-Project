@@ -1,17 +1,8 @@
-#!/usr/bin/env python3
-
-# Standard library imports
-
 # Remote library imports
-from flask import request
+from flask import request, session, jsonify
 from flask_restful import Resource
-
-# Local imports
+from models import db, User, Plant, Landscaper, Project
 from config import app, db, api
-# Add your model imports
-
-
-# Views go here!
 
 @app.route('/')
 def index():
