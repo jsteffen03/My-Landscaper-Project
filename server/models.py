@@ -12,9 +12,13 @@ class Plant(db.Model, SerializerMixin):
     name = db.Column(db.String, nullable=False)
     scientific_name = db.Column(db.String, nullable=False)
     type = db.Column(db.String, nullable=False)
+    img = db.Column(db.String)
     
     # Relationship to Projects via the join table
     projects = db.relationship('Project', secondary='project_plants', back_populates='plants')
+
+    # Serialize Rules
+    serialize_rules = ("-projects.plants",)
 
 class Project(db.Model, SerializerMixin):
     __tablename__ = 'projects'
@@ -30,6 +34,10 @@ class Project(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='projects')
     landscapers = db.relationship('Landscaper', secondary='project_landscapers', back_populates='projects')
     plants = db.relationship('Plant', secondary='project_plants', back_populates='projects')
+
+    # Serialize Rules
+    serialize_rules = ("-user.projects", "-landscapers.projects", "-plants.projects")
+    
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -76,6 +84,9 @@ class Landscaper(db.Model, SerializerMixin):
     
     # Relationship to Projects via the join table
     projects = db.relationship('Project', secondary='project_landscapers', back_populates='landscapers')
+
+    # Serialize Rules
+    serialize_rules = ("-projects.landscapers", "-_password_hash")
     
     # Password hashing and validation
     @hybrid_property

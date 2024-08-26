@@ -53,3 +53,10 @@ jspm_packages
 
 __pycache__
 
+# ingore instances and migrations file\
+/server/instance
+/server/migrations
+/Pipfile.lock
+.env
+
+
