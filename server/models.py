@@ -69,9 +69,17 @@ class User(db.Model, SerializerMixin):
     # Validations
     @validates('email')
     def validate_email(self, key, address):
-        if '@' not in address:
+        if '@' in address:
+            return address           
+        else:
             raise ValueError('Invalid email format')
-        return address
+
+    @validates('name')
+    def validate_name(self, key, name):
+        if len(name) > 3:
+            return name
+        else:
+            raise ValueError('Name must be at least 3 characters long')
 
 
 class Landscaper(db.Model, SerializerMixin):
@@ -104,9 +112,19 @@ class Landscaper(db.Model, SerializerMixin):
     
     @validates('email')
     def validate_email(self, key, address):
-        if '@' not in address:
+        if '@' in address:
+            return address           
+        else:
             raise ValueError('Invalid email format')
-        return address
+
+    
+    @validates('name')
+    def validate_name(self, key, name):
+        if len(name) > 3:
+            return name
+        else:
+            raise ValueError('Name must be at least 3 characters long')
+
 
 # Join tables
 class ProjectPlant(db.Model, SerializerMixin):
