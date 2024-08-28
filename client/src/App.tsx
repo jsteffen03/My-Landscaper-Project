@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 import 'semantic-ui-css/semantic.min.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Home from './Components/Home.tsx'
 import LoginUser from './Components/LoginUser.tsx'
 import LoginLandscaper from './Components/LoginLandscaper.tsx';
@@ -13,6 +13,31 @@ import ItemSearch from './Components/ItemSearch.tsx';
 function App() {
 
   const [user, setUser] = useState({})
+
+  interface SessionData {
+    user?: {
+      id: number;
+      email: string;
+      name: string;
+    };
+  }
+
+  useEffect(() => {
+    fetch('/api/checksessions')
+    .then(r=>{
+      if(r.ok){
+        return r.json() as Promise<SessionData>
+      }
+      else {
+        throw new Error
+      }
+    })
+    .then(data=>{
+      console.log(data)
+    })
+    .catch(()=>{})
+  }, [])
+
 
   return (
     <div>

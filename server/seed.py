@@ -5,6 +5,7 @@ from models import db, Plant, User, Landscaper, Project, ProjectPlant, ProjectLa
 with app.app_context():
 
     # Delete all data
+    print("deleting all data")
     db.session.query(Plant).delete()
     db.session.query(Landscaper).delete()
     db.session.query(Project).delete()
@@ -55,10 +56,10 @@ with app.app_context():
 
     
     # Create a new user
-    user = User(name='John Doe', email='john.doe@example.com', _password_hash='securepassword')
+    user = User(name='John Doe', email='john.doe@example.com', password_hash='securepassword')
     
     # Create a new landscaper
-    landscaper = Landscaper(name='Jane Smith', email='jane.smith@example.com', _password_hash='securepassword')
+    landscaper = Landscaper(name='Jane Smith', company='ABC Company', email='jane.smith@example.com', password_hash='securepassword')
     
     # Create a new project
     project = Project(title='Garden Renovation', description='Renovate the backyard garden.', status='In Progress', user=user)
