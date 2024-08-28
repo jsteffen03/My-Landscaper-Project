@@ -4,14 +4,14 @@ from flask_restful import Resource
 from models import db, User, Plant, Landscaper, Project
 from config import app, db, api
 
-# @app.before_request
-# def check_credentials():
-#     valid_routes = ("/checksessions","/login", "/users")
-#     if request.path not in valid_routes and 'user_id' not in session:
-#         return {"error": "please login"},401
-#     else:
-#         print(session)
-#         pass
+@app.before_request
+def check_credentials():
+    valid_routes = ("/checksessions","/login", "/users")
+    if request.path not in valid_routes and 'user_id' not in session:
+        return {"error": "please login"},401
+    else:
+        print(session)
+        pass
 
 class Users(Resource):
     def get(self):
@@ -100,6 +100,26 @@ class OneProject(Resource):
                 "error": "not valid id"
             },400
         
+    def patch(self,id):
+        project = Project.query.filter(Project.id == id).first()
+        if project:
+            try:
+                data = request.get_json()
+                for key in data:
+                    setattr(project,key,data[key])
+                db.session.add(project)
+                db.session.commit()
+                return project.to_dict()
+            except Exception as e:
+                print(e)
+                return {
+                    "error": "validation error"
+                }
+        else:
+            return {
+                "error": "not valid id1"
+            },400
+
     def delete(self, project_id):
         project = Project.query.get(project_id)
         if not project:
@@ -159,7 +179,7 @@ api.add_resource(AddlandscaperToProject, '/project/<int:project_id>/landscaper')
 class Login(Resource):
     def post(self):
         data = request.get_json()
-        user = User.query.filter(User.username == data['username']).first()
+        user = User.query.filter(User.email == data['email']).first()
         if user and user.authenticate(data['password']):
             session['stay_logged_in'] = data.get('stayLoggedIn', False)
             session['user_id'] = user.id 

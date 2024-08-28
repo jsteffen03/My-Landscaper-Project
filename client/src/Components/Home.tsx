@@ -32,7 +32,7 @@ function Home(){
             <Button color='green' onClick={() => navigate("/Login_user")}>
               Home Owner or just browsing? Click here.
             </Button>
-            <Button color='green' onClick={() => navigate("/Login_user")}>
+            <Button color='green' onClick={() => navigate("/Login_landscaper")}>
               Landscape Company? Click here.
             </Button>
           </div>
