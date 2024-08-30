@@ -6,8 +6,8 @@ from config import app, db, api
 
 @app.before_request
 def check_credentials():
-    valid_routes = ("/checksessions","/login", "/users")
-    if request.path not in valid_routes and 'user_id' not in session:
+    valid_routes = ("/checksessions","/login_user", "/login_landscaper","/landscapers", "/users")
+    if request.path not in valid_routes and 'user_id' not in session and 'company_id' not in session:
         return {"error": "please login"},401
     else:
         print(session)
@@ -21,14 +21,20 @@ class Users(Resource):
     def post(self):
         try:
             data = request.get_json()
-            u = User(
-                name = data['name'],
-                email = data['email'],
-                password_hash = data['password']
-            )
-            db.session.add(u)
-            db.session.commit()
-            return jsonify(u.to_dict())
+            au = User.query.all()
+            if au:
+                for user in au:
+                    if user.email == data['email']:
+                        return jsonify({"Error": "User already exists"}), 400
+                    else:
+                        u = User(
+                            name = data['name'],
+                            email = data['email'],
+                            password_hash = data['password']
+                        )
+                        db.session.add(u)
+                        db.session.commit()
+                        return jsonify(u.to_dict())
         except Exception as e:
             print(e)
             return jsonify({"Error": "Invalid username or password"}), 400
@@ -50,14 +56,21 @@ class Landscapers(Resource):
     def post(self):
         try:
             data = request.get_json()
-            l = Landscaper(
-                name = data['name'],
-                email = data['email'],
-                password_hash = data['password']
-            )
-            db.session.add(l)
-            db.session.commit()
-            return jsonify(l.to_dict())
+            al = Landscaper.query.all()
+            if al:
+                for landscaper in al:
+                    if landscaper.email == data['email']:
+                        return jsonify({"Error": "Landscaper already exists"}), 400
+                    else:
+                        l = Landscaper(
+                            name = data['name'],
+                            company = data['company'],
+                            email = data['email'],
+                            password_hash = data['password']
+                        )
+                        db.session.add(l)
+                        db.session.commit()
+                        return jsonify(l.to_dict())
         except Exception as e:
             print(e)
             return jsonify({"Error": "Invalid username or password"}), 400
@@ -176,11 +189,12 @@ class AddlandscaperToProject(Resource):
         
 api.add_resource(AddlandscaperToProject, '/project/<int:project_id>/landscaper')
 
-class Login(Resource):
+class LoginUser(Resource):
     def post(self):
         data = request.get_json()
         user = User.query.filter(User.email == data['email']).first()
         if user and user.authenticate(data['password']):
+            session.clear()
             session['stay_logged_in'] = data.get('stayLoggedIn', False)
             session['user_id'] = user.id 
             print(session)
@@ -188,7 +202,22 @@ class Login(Resource):
         else:
             return jsonify({"Error": "Invalid username or password"}), 400
         
-api.add_resource(Login, '/login')
+api.add_resource(LoginUser, '/login_user')
+
+class LoginLandscaper(Resource):
+    def post(self):
+        data = request.get_json()
+        landscaper = Landscaper.query.filter(Landscaper.email == data['email']).first()
+        if landscaper and landscaper.authenticate(data['password']):
+            session.clear()
+            session['stay_logged_in'] = data.get('stayLoggedIn', False)
+            session['landscaper_id'] = landscaper.id 
+            print(session)
+            return jsonify(landscaper.to_dict()) 
+        else:
+            return jsonify({"Error": "Invalid username or password"}), 400
+        
+api.add_resource(LoginLandscaper, '/login_landscaper')
 
 class Logout(Resource):
     def delete(self):

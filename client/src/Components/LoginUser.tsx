@@ -3,14 +3,14 @@ import { useState } from "react"
 import { useNavigate } from 'react-router-dom'  
 import { FormField, Button, Form } from 'semantic-ui-react'
 
-interface User {
+type User = {
     id: number;
     email: string;
     name: string;
     password: string;
 }
 
-interface NewUser {
+type NewUser = {
     name: string;
     email: string;
     password: string;
@@ -20,7 +20,7 @@ interface LoginUserProps {
     setUser: (user: User) => void;
 }
 
-const LoginUser: React.FC<LoginUserProps> = ({ setUser }) => {
+function LoginUser({ setUser }: LoginUserProps) {
 
     const navigate = useNavigate();
 
@@ -30,27 +30,22 @@ const LoginUser: React.FC<LoginUserProps> = ({ setUser }) => {
     const [cPassword, setCPassword] = useState<string>("");
     const [sLI, setSLI] = useState<boolean>(false);
 
-    function handleLogin(
-        e?: React.FormEvent<HTMLFormElement>,
-        Loginemail = email,
-        loginPassword = password,
-        stayLoggedIn = sLI
-      ) {
+    function handleLogin(e?: React.FormEvent<HTMLFormElement>){
         if (e) e.preventDefault();
-        fetch("/api/login", {
+        fetch("/api/login_user", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                email: Loginemail,
-                password: loginPassword,
-                stayLoggedIn: stayLoggedIn
+                email: email,
+                password: password,
+                stayLoggedIn: sLI
             }),
         })
         .then(r=>r.json())
         .then(data=>{
-        console.log(data)
+            console.log(data)
             setUser(data.user)
             navigate('/user_page')
         })
@@ -71,11 +66,11 @@ const LoginUser: React.FC<LoginUserProps> = ({ setUser }) => {
         .then(r=>r.json())
         .then(data=>{
             console.log(data)
-            handleLogin(undefined, newUser.email, newUser.password, false);
+            handleLogin();
         })
         .catch(data=>{
             console.log(data)
-            alert("Not valid username/password")
+            alert("An account with this email already exsists. Please login.")
         })
     }
 

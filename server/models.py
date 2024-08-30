@@ -114,11 +114,18 @@ class Landscaper(db.Model, SerializerMixin):
     @validates('email')
     def validate_email(self, key, address):
         if '@' in address:
-            return address           
+            return address
         else:
             raise ValueError('Invalid email format')
 
     
+    @validates('company')
+    def validate_name(self, key, company):
+        if len(company) > 3:
+            return company
+        else:
+            raise ValueError('Company Name must be at least 3 characters long')
+        
     @validates('name')
     def validate_name(self, key, name):
         if len(name) > 3:
