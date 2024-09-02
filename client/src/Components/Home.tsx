@@ -6,7 +6,7 @@ function Home(){
 
   //renders home
     const navigate = useNavigate()
-
+    
     return(
         <div className="body">
         <h1 className="Title">My Landscaper</h1>

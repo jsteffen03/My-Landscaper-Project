@@ -100,22 +100,22 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
                 <h1>Login</h1>
                 <FormField>
                     <label>Email</label>
-                    <input placeholder='Username' onChange={(e)=>setEmail(e.target.value)}/>
+                    <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
                 </FormField>
                 <FormField>
                     <label>Password</label>
                     <input placeholder='Password' onChange={(e)=>setPassword(e.target.value)}/>
                 </FormField>
                 <div className="Button">
-                    <Button color='green' type="submit">Login Home Owner</Button>
-                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)}>{sLI === true ? "Rember Me" : "Don't Rember Me"}</Button>
+                    <Button color='green' type="submit">Login Landscaper</Button>
+                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Rember Me" : "Don't Rember Me"}</Button>
                 </div>
             </Form>
             <Form className="CreateAccount" onSubmit={(e)=>addLandscaper(e)}>
                 <h1>Create Account</h1>
                 <FormField>
                     <label>Name</label>
-                    <input placeholder='Username' onChange={(e)=>setName(e.target.value)}/>
+                    <input placeholder='Name' onChange={(e)=>setName(e.target.value)}/>
                 </FormField>
                 <FormField>
                     <label>Company Name</label>
@@ -123,7 +123,7 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
                 </FormField>
                 <FormField>
                     <label>Email</label>
-                    <input placeholder='Username' onChange={(e)=>setEmail(e.target.value)}/>
+                    <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
                 </FormField>
                 <FormField>
                     <label>Password</label>
@@ -134,7 +134,7 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
                     <input placeholder='Password' onChange={(e)=>setCPassword(e.target.value)}/>
                 </FormField>
                 <div className="Button">
-                    <Button color='green' type="submit">Create a Home Owner Acount</Button>
+                    <Button color='green' type="submit">Create a Landscaper Acount</Button>
                 </div>
             </Form>
         </div>

@@ -16,73 +16,127 @@ type User = {
   password: string;
 }
 
-type NewLandscaper = {
+type Landscaper = {
+  id: number;
   name: string;
   company: string;
   email: string;
   password: string;
 }
 
-
 function App() {
 
   const [user, setUser] = useState<User | null>(null)
-  const [landscaper, setLandscaper] = useState<NewLandscaper | null>(null)
-
-  interface SessionData {
-    user?: {
-      id: number;
-      email: string;
-      name: string;
-    };
-  }
+  const [landscaper, setLandscaper] = useState<Landscaper | null>(null)
+  const [userData, setUserData] = useState({})
+  const [landscaperData, setLandscaperData] = useState({})
+  const [projectId, setProjectId] = useState<any>(null)
 
   useEffect(() => {
-    fetch('/api/checksessions')
+      fetch('/api/users')
+      .then(r=>{
+        if(r.ok){
+          return r.json()
+        }
+        else {
+          throw new Error
+        }
+      })
+      .then(data=>{
+        setUserData(data)
+      })
+      .catch(()=>{})
+  }, [])
+
+  useEffect(() => {
+    fetch('/api/landscapers')
     .then(r=>{
       if(r.ok){
-        return r.json() as Promise<SessionData>
+        return r.json()
       }
       else {
         throw new Error
       }
     })
     .then(data=>{
-      console.log(data)
+      setLandscaperData(data)
     })
     .catch(()=>{})
   }, [])
 
+  useEffect(() => {
+    fetch('/api/checksessions')
+    .then(r=>{
+      if(r.ok){
+        return r.json()
+      }
+      else {
+        throw new Error
+      }
+    })
+    .then(data=>{
+      if (data.company) {
+        setLandscaper(data)
+      }
+      else{
+        setUser(data)
+      }
+    })
+    .catch(()=>{})
+  }, [])
+
+  let routes: JSX.Element;
+
+  // Routes for different user types
+  if (user) {
+    routes = (
+      <Routes>
+        <Route path="/user_page" element={
+          <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>
+        }/>
+        <Route path="/project_page" element={
+          <ProjectPage projectId={projectId}/>
+        }/>
+        <Route path="/item_search" element={
+          <ItemSearch />
+        }/>
+        <Route path='*' element={
+          <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>
+          } />
+      </Routes>
+    )
+  } else if (landscaper) {
+    routes = (
+      <Routes>
+        <Route path="/landscaper_page" element={
+          <LandscaperPage />
+        }/>
+        <Route path="*" element={<LandscaperPage />} />
+      </Routes>
+    )
+  } else {
+    routes = (
+      <Routes>
+        <Route path="/" element={
+          <Home />
+        }/>
+        <Route path="/login_user" element={
+          <LoginUser setUser={setUser}/>
+        }/>
+        <Route path="/login_landscaper" element={
+          <LoginLandscaper setLandscaper={setLandscaper}/>
+        }/>
+        <Route path='*' element={<Home />} />
+      </Routes>
+    )
+  }
+
   return (
-    <div>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <Home />
-          }/>
-          <Route path="/login_user" element={
-            <LoginUser setUser={setUser}/>
-          }/>
-          <Route path="/login_landscaper" element={
-            <LoginLandscaper setLandscaper={setLandscaper}/>
-          }/>
-          <Route path="/landscaper_page" element={
-            <LandscaperPage />
-          }/>
-          <Route path="/user_page" element={
-            <UserPage />
-          }/>
-          <Route path="/project_page" element={
-            <ProjectPage />
-          }/>
-          <Route path="/item_search" element={
-            <ItemSearch />
-          }/>
-          <Route path='*' element={<Home />} />
-        </Routes>
-      </BrowserRouter>
+    <div className="body2">
+      <BrowserRouter>{routes}</BrowserRouter>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+

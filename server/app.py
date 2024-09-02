@@ -84,23 +84,25 @@ class Projects(Resource):
     
     def post(self):
         try:
-            user_id = session.get['user_id']
+            # Correct session access
+            user_id = session.get('user_id')  
             if not user_id:
-                return jsonify({"Error": "User not logged in"}), 400
+                return {"Error": "User not logged in"}, 401
             data = request.get_json()
+            print(data)
             p = Project(
-                title = data['title'],
-                description = data['description'],
-                status = data['status'],
-                user_id = user_id
+                title=data['title'],
+                description=data['description'],
+                status=data['status'],
+                user_id=user_id
             )
             db.session.add(p)
             db.session.commit()
-            return jsonify(p.to_dict())
+            return p.to_dict(), 201
         except Exception as e:
             print(e)
-            return jsonify({"Error": "Invalid username or password"}), 400
-    
+            return jsonify({"Error": "Not valid data"}), 400
+        
 api.add_resource(Projects, '/projects')
 
 class OneProject(Resource):
@@ -133,8 +135,8 @@ class OneProject(Resource):
                 "error": "not valid id1"
             },400
 
-    def delete(self, project_id):
-        project = Project.query.get(project_id)
+    def delete(self, id):
+        project = Project.query.get(id)
         if not project:
             return {"error": "Project not found"}, 404
         
@@ -228,9 +230,12 @@ api.add_resource(Logout,'/logout')
 class CheckSession(Resource):
     def get(self):
         print(session)
-        if session.get('stay_logged_in') == True:
+        if session.get('stay_logged_in') == True and session.get('user_id'):
             user = User.query.filter(User.id == session.get('user_id')).first()
             return user.to_dict()
+        elif session.get('stay_logged_in') == True and session.get('landscaper_id'):
+            landscaper = Landscaper.query.filter(Landscaper.id == session.get('landscaper_id')).first()
+            return landscaper.to_dict()
         else:
             return {}, 404
         

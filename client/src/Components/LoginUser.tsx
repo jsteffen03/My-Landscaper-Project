@@ -46,7 +46,7 @@ function LoginUser({ setUser }: LoginUserProps) {
         .then(r=>r.json())
         .then(data=>{
             console.log(data)
-            setUser(data.user)
+            setUser(data)
             navigate('/user_page')
         })
         .catch(data=>{
@@ -97,7 +97,7 @@ function LoginUser({ setUser }: LoginUserProps) {
                 <h1>Login</h1>
                 <FormField>
                     <label>Email</label>
-                    <input placeholder='john.doe@example.com' onChange={(e)=>setEmail(e.target.value)}/>
+                    <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
                 </FormField>
                 <FormField>
                     <label>Password</label>
@@ -105,7 +105,7 @@ function LoginUser({ setUser }: LoginUserProps) {
                 </FormField>
                 <div className="Button">
                     <Button color='green' type="submit">Login Home Owner</Button>
-                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)}>{sLI === true ? "Rember Me" : "Don't Rember Me"}</Button>
+                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Rember Me" : "Don't Rember Me"}</Button>
                 </div>
             </Form>
             <Form className="CreateAccount" onSubmit={(e)=>addUser(e)}>
@@ -116,7 +116,7 @@ function LoginUser({ setUser }: LoginUserProps) {
                 </FormField>
                 <FormField>
                     <label>Email</label>
-                    <input placeholder='john.doe@example.com' onChange={(e)=>setEmail(e.target.value)}/>
+                    <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
                 </FormField>
                 <FormField>
                     <label>Password</label>
