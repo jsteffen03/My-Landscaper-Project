@@ -6,6 +6,10 @@ from config import app, db, api
 
 @app.before_request
 def check_credentials():
+
+    if request.path.startswith('/static/'):
+        return None
+
     valid_routes = ("/checksessions","/login_user", "/login_landscaper","/landscapers", "/users")
     if request.path not in valid_routes and 'user_id' not in session and 'company_id' not in session:
         return {"error": "please login"},401

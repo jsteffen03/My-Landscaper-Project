@@ -48,7 +48,7 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
         .then(r=>r.json())
         .then(data=>{
             console.log(data)
-            setLandscaper(data.landscaper)
+            setLandscaper(data)
             navigate('/landscaper_page')
         })
         .catch(data=>{

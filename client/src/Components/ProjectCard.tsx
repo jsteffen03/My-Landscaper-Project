@@ -7,7 +7,7 @@ type Project = {
     status: string;
     id: number;
     description: string;
-    landscapers: [];
+    landscapers?: [];
 }
 
 function ProjectCard({project, projectData, setProjectData, setProjectId}:{project:Project, projectData:any, setProjectData:any, setProjectId: any}) {

@@ -30,7 +30,7 @@ function App() {
   const [landscaper, setLandscaper] = useState<Landscaper | null>(null)
   const [userData, setUserData] = useState({})
   const [landscaperData, setLandscaperData] = useState({})
-  const [projectId, setProjectId] = useState<any>(null)
+  const [projectId, setProjectId] = useState<any>("")
 
   useEffect(() => {
       fetch('/api/users')
@@ -109,9 +109,9 @@ function App() {
     routes = (
       <Routes>
         <Route path="/landscaper_page" element={
-          <LandscaperPage />
+          <LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper}/>
         }/>
-        <Route path="*" element={<LandscaperPage />} />
+        <Route path="*" element={<LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper}/>} />
       </Routes>
     )
   } else {
