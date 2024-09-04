@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import {Button} from 'semantic-ui-react'
+import LProjectCard from './LProjectCard.tsx'
 
-function LandscaperPage({setLandscaper, landscaper}: {setLandscaper:any, landscaper:any}){
+function LandscaperPage({setLandscaper, landscaper, setProjectId}: {setLandscaper:any, landscaper:any, setProjectId: any}) {
 
     const navigate = useNavigate();
 
@@ -11,6 +12,8 @@ function LandscaperPage({setLandscaper, landscaper}: {setLandscaper:any, landsca
         .then(data => setLandscaper(undefined))
         .then(()=>navigate('/'))
     }
+    
+    const projectRender = landscaper.projects.map((project:any) => <LProjectCard key={project.id} project={project} setProjectId={setProjectId}/>)
 
     return(
         <div className="container">
@@ -25,11 +28,8 @@ function LandscaperPage({setLandscaper, landscaper}: {setLandscaper:any, landsca
                         <h2>My Projects</h2>
                     </div> 
                     <div>
-                        {/* {projectRender}  */}
+                        {projectRender} 
                     </div> 
-                </div>
-                <div className="ProjectNotes">
-                    <h2>White Space for Stretch deliverables/ maybe profile information</h2>
                 </div>
             </div>
         </div>

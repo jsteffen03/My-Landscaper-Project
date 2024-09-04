@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import {ItemMeta,ItemHeader,ItemGroup,ItemExtra,ItemDescription,ItemContent,Button,Icon,Item,Label} from 'semantic-ui-react'
+import {ItemMeta,ItemHeader,ItemGroup,ItemDescription,ItemContent,Button,Item} from 'semantic-ui-react'
 
 type Project = {
     title: string;
@@ -40,6 +40,7 @@ function ProjectCard({project, projectData, setProjectData, setProjectId}:{proje
 
     function editProject(){
         setProjectId(project.id)
+        sessionStorage.setItem('projectId', project.id.toString())
         console.log(project.id)
         navigate('/project_page')
     }

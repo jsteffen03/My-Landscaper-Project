@@ -21,7 +21,7 @@ with app.app_context():
     plant3 = Plant(name='Mimosa', scientific_name='Mimosa', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/MimosaTree.jpg")
     plant4 = Plant(name='Autumn Blooming Cherry', scientific_name='Prunus', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/AutumnBloomingCherry.jpg")
     plant5 = Plant(name='Weeping Cherry', scientific_name='Prunus', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/WeepingCherry.jpg")
-    plant6 = Plant(name='Ivory Silk Japanese Lilac', scientific_name='Iris', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/IvorySilkJapaneseLilacTree.jpg")
+    plant6 = Plant(name='Ivory Silk Japanese Lilac', scientific_name='Iris', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/IvorySilkJapaneseTreeLilac.jpg")
     plant7 = Plant(name='Purple Robe locust', scientific_name='Rubus', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/PurpleRobeLocustTree.jpg")
     plant8 = Plant(name='White Flowering Dogwood', scientific_name='Ginkgo', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/WhiteFloweringDogwood.jpg")
     plant9 = Plant(name='Purple Pony Plum', scientific_name='Pyrus', type='Flowering Tree', img="http://127.0.0.1:5555/static/Images/PurplePonyPlumTree.jpg")

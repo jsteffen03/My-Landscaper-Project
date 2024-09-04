@@ -91,6 +91,14 @@ function UserPage({ setUser, user, setProjectId}: {setUser:any, user:any, setPro
                 <Button color="black" onClick={handleLogout}>Log Out</Button> 
             </div> 
             <div className="Content">
+                <div className="ProjectPlants">
+                    <div className="Button">
+                        <h2>My Projects</h2>
+                    </div> 
+                    <div>
+                        {projectRender} 
+                    </div> 
+                </div>
                 <div className="MyProjects">
                     <Form onSubmit={(e)=>addProject(e)}>
                         <h2>New Project</h2> 
@@ -104,17 +112,6 @@ function UserPage({ setUser, user, setProjectId}: {setUser:any, user:any, setPro
                             <input type="text"  placeholder="Project Details" onChange={(e)=>setNewPDescription(e.target.value)}></input>
                         </FormField>
                     </Form>
-                </div>
-                <div className="ProjectPlants">
-                    <div className="Button">
-                        <h2>My Projects</h2>
-                    </div> 
-                    <div>
-                        {projectRender} 
-                    </div> 
-                </div>
-                <div className="ProjectNotes">
-                    <h2>White Space for Stretch deliverables/ maybe profile information</h2>
                 </div>
             </div>
         </div>

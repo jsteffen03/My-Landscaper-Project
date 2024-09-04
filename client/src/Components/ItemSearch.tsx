@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import {Button, Card} from 'semantic-ui-react'
-import PlantCard from './plantCard.tsx'
+import PlantCard from './PlantCard.tsx'
 
 type Plants = {
     id: number;
@@ -11,7 +11,7 @@ type Plants = {
     img: string;
 }
 
-function ItemSearch(){
+function ItemSearch({projectId}: {projectId:number}) {
 
     const navigate = useNavigate();
     const [plants, setPlants] = useState<Plants | null>(null)
@@ -34,19 +34,17 @@ function ItemSearch(){
     }, [])
 
 
-    const plantRender = plants?.map((plant:Plants) => <PlantCard key={plant.id} plant={plant}/>)
+    const plantRender = plants?.map((plant:Plants) => <PlantCard key={plant.id} plant={plant} projectId={projectId}/>)
     
     return (
         <div className="container">
             <div className="Header"> 
                 <h1>Project Page</h1>
-                <Button color='black' onClick={(e)=>navigate('/user')}>Back to Home</Button>
+                <Button color='black' onClick={(e)=>navigate('/project_page')}>Back to Home</Button>
             </div> 
             <div className="Content2">
                 <div className="plants2">
-                    <Card.Group>
-                        {/* {selectedFurnitureRender} */}
-                    </Card.Group>
+                    Filters 
                 </div>
                 <div className="plants">
                     <Card.Group>

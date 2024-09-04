@@ -8,6 +8,7 @@ import LandscaperPage from './Components/LandscaperPage.tsx';
 import UserPage from './Components/UserPage.tsx';
 import ProjectPage from './Components/ProjectPage.tsx';
 import ItemSearch from './Components/ItemSearch.tsx';
+import LProjectPage from './Components/LProjectPage.tsx';
 
 type User = {
   id: number;
@@ -95,10 +96,10 @@ function App() {
           <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>
         }/>
         <Route path="/project_page" element={
-          <ProjectPage projectId={projectId}/>
+          <ProjectPage projectId={projectId} setProjectId={setProjectId}/>
         }/>
         <Route path="/item_search" element={
-          <ItemSearch />
+          <ItemSearch projectId={projectId} setProjectId={setProjectId}/>
         }/>
         <Route path='*' element={
           <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>
@@ -109,9 +110,12 @@ function App() {
     routes = (
       <Routes>
         <Route path="/landscaper_page" element={
-          <LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper}/>
+          <LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper} setProjectId={setProjectId}/>
         }/>
-        <Route path="*" element={<LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper}/>} />
+        <Route path="/l_project_page" element={
+          <LProjectPage projectId={projectId} setProjectId={setProjectId}/>
+        }/>
+        <Route path="*" element={<LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper} setProjectId={setProjectId}/>} />
       </Routes>
     )
   } else {

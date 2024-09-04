@@ -11,7 +11,7 @@ def check_credentials():
         return None
 
     valid_routes = ("/checksessions","/login_user", "/login_landscaper","/landscapers", "/users")
-    if request.path not in valid_routes and 'user_id' not in session and 'company_id' not in session:
+    if request.path not in valid_routes and 'user_id' not in session and 'landscaper_id' not in session:
         return {"error": "please login"},401
     else:
         print(session)
@@ -247,4 +247,3 @@ api.add_resource(CheckSession,'/checksessions')
     
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-

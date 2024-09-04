@@ -1,6 +1,6 @@
 import { CardMeta, CardHeader, CardContent, Card, Button, Image } from 'semantic-ui-react'
 
-function plantCard({plant}: {plant:any}){
+function PlantCard({plant, projectId}: {plant:any, projectId:number}){
 
     return(
         <div key={plant.name}>
@@ -21,7 +21,4 @@ function plantCard({plant}: {plant:any}){
     )
 }
 
-export default plantCard
-
-// /home/jcsteffen03/Development/code/phase-5/My-Landscaper-Project/server/static/Images/Austrain Pine Tree.jpg
-// server/static/Images/Austrain Pine Tree.jpg
+export default PlantCard
