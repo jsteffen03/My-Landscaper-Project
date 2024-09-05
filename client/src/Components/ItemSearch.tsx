@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import {Button, Card} from 'semantic-ui-react'
 import PlantCard from './PlantCard.tsx'
 
-type Plants = {
+type Plant = {
     id: number;
     name: string;
     scientific_name: string;
@@ -14,7 +14,7 @@ type Plants = {
 function ItemSearch({projectId}: {projectId:number}) {
 
     const navigate = useNavigate();
-    const [plants, setPlants] = useState<Plants | null>(null)
+    const [plants, setPlants] = useState<Plant[]>([])
 
     useEffect(() => {
         fetch('/api/plants')
@@ -34,13 +34,13 @@ function ItemSearch({projectId}: {projectId:number}) {
     }, [])
 
 
-    const plantRender = plants?.map((plant:Plants) => <PlantCard key={plant.id} plant={plant} projectId={projectId}/>)
+    const plantRender = plants?.map((plant:Plant) => <PlantCard key={plant.id} plant={plant} projectId={projectId}/>)
     
     return (
         <div className="container">
             <div className="Header"> 
-                <h1>Project Page</h1>
-                <Button color='black' onClick={(e)=>navigate('/project_page')}>Back to Home</Button>
+                <h1>My Landscaper - Plants</h1>
+                <Button color='black' onClick={()=>navigate('/project_page')}>Back to Project</Button>
             </div> 
             <div className="Content2">
                 <div className="plants2">

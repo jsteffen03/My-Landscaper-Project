@@ -1,4 +1,4 @@
-import { CardMeta, CardHeader, CardContent, Card, Button, Image } from 'semantic-ui-react'
+import { CardMeta, CardHeader, CardContent, Card, Button} from 'semantic-ui-react'
 
 function SelectedPlantCard({plant, projectId}: {plant:any, projectId:number}){
 
@@ -14,7 +14,7 @@ function SelectedPlantCard({plant, projectId}: {plant:any, projectId:number}){
                     <CardMeta>
                         {plant.type}
                     </CardMeta>
-                    <Button color='green' onClick={(e)=>console.log(e)}>Delete From Project</Button>
+                    <Button color='red' onClick={(e)=>console.log(e)}>Remove</Button>
                 </CardContent>
             </Card>    
         </div>

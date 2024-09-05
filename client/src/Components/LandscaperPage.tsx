@@ -9,7 +9,7 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: {setLandscape
     function handleLogout(){
         fetch('/api/logout',{method:"DELETE"})
         .then(r=>r.json())
-        .then(data => setLandscaper(undefined))
+        .then(() => setLandscaper(undefined))
         .then(()=>navigate('/'))
     }
     

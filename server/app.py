@@ -172,8 +172,25 @@ class AdditemToProject(Resource):
         except Exception as e:
             print(e)
             return {"error": "Failed to add item to project"}, 500
+        
+    def delete(self, id):
+        try:
+            data = request.get_json()
+            plant_id = data.get('plant_id')
 
-api.add_resource(AdditemToProject, '/project/<int:project_id>/plant')
+            project = Project.query.get(id)
+            plant = Plant.query.get(plant_id)
+            if project and plant:
+                project.plants.remove(plant)
+                db.session.commit()
+                return {"message": "Item removed from project"}, 200
+            else:
+                return {"error": "Project or item not found"}, 404
+        except Exception as e:
+            print(e)
+            return {"error": "Failed to remove item from project"}, 500    
+
+api.add_resource(AdditemToProject, '/project/<int:id>/plant')
 
 class AddlandscaperToProject(Resource):
     def post(self, project_id):

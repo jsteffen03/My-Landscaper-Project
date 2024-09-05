@@ -8,9 +8,22 @@ type NewProject = {
     description: string;
     user_id: number;
     status: string;
-  };
+};
 
-function UserPage({ setUser, user, setProjectId}: {setUser:any, user:any, setProjectId: any}) {
+type User = {
+    id: number;
+    email: string;
+    name: string;
+    password: string;
+    projects?: [];
+  }
+
+
+function UserPage({ 
+    setUser, user, setProjectId
+}: {
+    setUser: React.Dispatch<React.SetStateAction<User | null>>, user: User, setProjectId: React.Dispatch<React.SetStateAction<number>>
+}) {
 
     const [projectData, setProjectData] = useState<any>([])
     const [userProjects, setUserProjects] = useState<any>([])
@@ -43,7 +56,7 @@ function UserPage({ setUser, user, setProjectId}: {setUser:any, user:any, setPro
     function handleLogout(){
         fetch('/api/logout',{method:"DELETE"})
         .then(r=>r.json())
-        .then(data => setUser(undefined))
+        .then(() => setUser(null))
         .then(()=>navigate('/'))
     }
 

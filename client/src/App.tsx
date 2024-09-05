@@ -15,6 +15,7 @@ type User = {
   email: string;
   name: string;
   password: string;
+  projects?: [];
 }
 
 type Landscaper = {
@@ -29,9 +30,9 @@ function App() {
 
   const [user, setUser] = useState<User | null>(null)
   const [landscaper, setLandscaper] = useState<Landscaper | null>(null)
-  const [userData, setUserData] = useState({})
-  const [landscaperData, setLandscaperData] = useState({})
-  const [projectId, setProjectId] = useState<any>("")
+  const [userData, setUserData] = useState<User[]>([])
+  const [landscaperData, setLandscaperData] = useState<Landscaper[]>([])
+  const [projectId, setProjectId] = useState<number>(0)
 
   useEffect(() => {
       fetch('/api/users')
@@ -99,7 +100,7 @@ function App() {
           <ProjectPage projectId={projectId} setProjectId={setProjectId}/>
         }/>
         <Route path="/item_search" element={
-          <ItemSearch projectId={projectId} setProjectId={setProjectId}/>
+          <ItemSearch projectId={projectId}/>
         }/>
         <Route path='*' element={
           <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>
