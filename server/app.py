@@ -156,11 +156,12 @@ class OneProject(Resource):
 api.add_resource(OneProject, '/project/<int:id>')
 
 class AdditemToProject(Resource):
-    def post(self, project_id):
+    def post(self, id):
         try:
             data = request.get_json()
             plant = data.get('plant_id')
-            project = Project.query.get(project_id)
+            
+            project = Project.query.get(id)
             plant = Plant.query.get(plant)
 
             if project and plant:
@@ -180,6 +181,7 @@ class AdditemToProject(Resource):
 
             project = Project.query.get(id)
             plant = Plant.query.get(plant_id)
+
             if project and plant:
                 project.plants.remove(plant)
                 db.session.commit()

@@ -16,8 +16,7 @@ type User = {
     name: string;
     password: string;
     projects?: [];
-  }
-
+}
 
 function UserPage({ 
     setUser, user, setProjectId
@@ -76,7 +75,6 @@ function UserPage({
             console.log("im here")
         })
     }
-
 
     function addProject(e?: React.FormEvent<HTMLFormElement>){
         if (e) e.preventDefault();

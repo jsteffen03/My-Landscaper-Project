@@ -3,6 +3,13 @@ import { useState, useEffect } from 'react'
 import {Button} from 'semantic-ui-react'
 import SelectedPlantCard from './SelectedPlantCard';
 
+type Plant = {
+    id: number;
+    name: string;
+    scientific_name: string;
+    type: string;
+    img: string;
+}
 
 function ProjectPage({projectId, setProjectId}: {projectId:number, setProjectId: React.Dispatch<React.SetStateAction<number>>}) {
 
@@ -16,6 +23,7 @@ function ProjectPage({projectId, setProjectId}: {projectId:number, setProjectId:
 
     const navigate = useNavigate();
     const [project, setProject] = useState<any>([])
+    const [projectPlants, setProjectPlants] = useState<Plant[]>([])
 
     useEffect(() => {
         if (projectId) {
@@ -30,12 +38,13 @@ function ProjectPage({projectId, setProjectId}: {projectId:number, setProjectId:
             })
             .then(data=>{
                 setProject(data)
+                setProjectPlants(data.plants)
             })
             .catch(()=>{})
         }
     }, [projectId])
 
-    const plantRender = project.plants?.map((plant:any) => <SelectedPlantCard key={plant.id} plant={plant} projectId={projectId}/>)
+    const plantRender = projectPlants?.map((plant:any) => <SelectedPlantCard key={plant.id} plant={plant} projectId={projectId}  projectPlants={projectPlants} setProjectPlants={setProjectPlants}/>)
 
     return(
         <div className="container">

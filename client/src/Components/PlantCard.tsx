@@ -28,9 +28,6 @@ function PlantCard({plant, projectId}: {plant:Plant, projectId:number}){
             else
                 throw new Error("Failed to add plant to project")
         })
-        .then(data=>{
-            console.log(data)
-        })
         .catch(error =>{
             console.log(error)
         })
