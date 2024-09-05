@@ -30,41 +30,7 @@ function App() {
 
   const [user, setUser] = useState<User | null>(null)
   const [landscaper, setLandscaper] = useState<Landscaper | null>(null)
-  const [userData, setUserData] = useState<User[]>([])
-  const [landscaperData, setLandscaperData] = useState<Landscaper[]>([])
   const [projectId, setProjectId] = useState<number>(0)
-
-  useEffect(() => {
-      fetch('/api/users')
-      .then(r=>{
-        if(r.ok){
-          return r.json()
-        }
-        else {
-          throw new Error
-        }
-      })
-      .then(data=>{
-        setUserData(data)
-      })
-      .catch(()=>{})
-  }, [])
-
-  useEffect(() => {
-    fetch('/api/landscapers')
-    .then(r=>{
-      if(r.ok){
-        return r.json()
-      }
-      else {
-        throw new Error
-      }
-    })
-    .then(data=>{
-      setLandscaperData(data)
-    })
-    .catch(()=>{})
-  }, [])
 
   useEffect(() => {
     fetch('/api/checksessions')
