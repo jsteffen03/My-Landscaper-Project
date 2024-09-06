@@ -25,13 +25,7 @@ Below is the tech stack that I will be using for this project.
 - **Semantic UI React**: A UI component framework based on Semantic UI, used for styling and building responsive interfaces.
 
 ### General:
-- **JavaScript**: The primary programming language for the frontend (alongside React.js).
+- **JavaScript**: The primary programming language for the front end (alongside React.js).
 - **HTML/CSS**: Markup and styling for the web pages.
 - **SQLAlchemy Serializer**: A mixin used to serialize SQLAlchemy models to JSON format.
 
-
-## Progress
-
-Here is where I will be tracking my progress throughtout the developemnt of this project
-
-8/26/2024 - Created the models for my backend, created teh needed routes that I will be using on the data, developed a seed file to input data into my backend.
