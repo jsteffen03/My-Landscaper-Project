@@ -155,12 +155,12 @@ class OneProject(Resource):
 
 api.add_resource(OneProject, '/project/<int:id>')
 
-class AdditemToProject(Resource):
+class ItemToProject(Resource):
     def post(self, id):
         try:
             data = request.get_json()
             plant = data.get('plant_id')
-            
+
             project = Project.query.get(id)
             plant = Plant.query.get(plant)
 
@@ -192,7 +192,7 @@ class AdditemToProject(Resource):
             print(e)
             return {"error": "Failed to remove item from project"}, 500    
 
-api.add_resource(AdditemToProject, '/project/<int:id>/plant')
+api.add_resource(ItemToProject, '/project/<int:id>/plant')
 
 class AddlandscaperToProject(Resource):
     def post(self, project_id):

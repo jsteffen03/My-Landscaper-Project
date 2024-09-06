@@ -26,11 +26,28 @@ type Landscaper = {
   password: string;
 }
 
+type Plant = {
+    id: number;
+    name: string;
+    scientific_name: string;
+    type: string;
+    img: string;
+}
+
 function App() {
 
   const [user, setUser] = useState<User | null>(null)
   const [landscaper, setLandscaper] = useState<Landscaper | null>(null)
   const [projectId, setProjectId] = useState<number>(0)
+  const [projectPlants, setProjectPlants] = useState<Plant[]>([])
+
+  useEffect(() => {
+    const storedProjectId = sessionStorage.getItem('projectId');
+    if (storedProjectId) {
+        const projectIdAsInt = parseInt(storedProjectId, 10);
+        setProjectId(projectIdAsInt);
+      } 
+  }, []); 
 
   useEffect(() => {
     fetch('/api/checksessions')
@@ -63,10 +80,10 @@ function App() {
           <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>
         }/>
         <Route path="/project_page" element={
-          <ProjectPage projectId={projectId} setProjectId={setProjectId}/>
+          <ProjectPage projectId={projectId} setProjectId={setProjectId} projectPlants={projectPlants} setProjectPlants={setProjectPlants}/>
         }/>
         <Route path="/item_search" element={
-          <ItemSearch projectId={projectId}/>
+          <ItemSearch projectId={projectId} projectPlants={projectPlants} setProjectPlants={setProjectPlants}/>
         }/>
         <Route path='*' element={
           <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>

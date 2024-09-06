@@ -11,10 +11,28 @@ type Plant = {
     img: string;
 }
 
-function ItemSearch({projectId}: {projectId:number}) {
+function ItemSearch({projectId, projectPlants, setProjectPlants}: {projectId:number, projectPlants:Plant[], setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>}) {
 
     const navigate = useNavigate();
     const [plants, setPlants] = useState<Plant[]>([])
+
+    useEffect(() => {
+        if (projectId != 0) {
+            fetch(`/api/project/${projectId}`)
+            .then(r=>{
+                if(r.ok){
+                    return r.json()
+                }
+                else {
+                    throw new Error
+                }
+            })
+            .then(data=>{
+                setProjectPlants(data.plants)
+            })
+            .catch(()=>{})
+        }
+    }, [projectPlants])
 
     useEffect(() => {
         fetch('/api/plants')
@@ -28,13 +46,16 @@ function ItemSearch({projectId}: {projectId:number}) {
         })
         .then(data=>{
             setPlants(data)
-            console.log(data)
         })
         .catch(()=>{})
     }, [])
 
 
-    const plantRender = plants?.map((plant:Plant) => <PlantCard key={plant.id} plant={plant} projectId={projectId}/>)
+    const plantRender = plants?.map((plant:Plant) => {
+        const isInProject = projectPlants.some((p) => p.id === plant.id);
+        return  (
+        <PlantCard key={plant.id} plant={plant} projectId={projectId} projectPlants={plants} setProjectPlants={setProjectPlants} isInProject={isInProject}/>)
+    })
     
     return (
         <div className="container">

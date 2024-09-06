@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { CardMeta, CardHeader, CardContent, Card, Button, Image } from 'semantic-ui-react'
 
 type Plant = {
@@ -9,7 +10,8 @@ type Plant = {
 }
 
 
-function PlantCard({plant, projectId}: {plant:Plant, projectId:number}){
+function PlantCard({plant, projectId, projectPlants, setProjectPlants, isInProject}: {plant:Plant, projectId:number, projectPlants:Plant[], setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>, isInProject: boolean}){
+
 
     function addToProject(id: number) {
         fetch(`/api/project/${projectId}/plant`, {
@@ -26,18 +28,21 @@ function PlantCard({plant, projectId}: {plant:Plant, projectId:number}){
             if(r.ok)
                 return r.json()
             else
-                throw new Error("Failed to add plant to project")
+                alert("Failed to add plant to project")
         })
+        .then((newPlant: Plant) => {
+            setProjectPlants((prevPlants) => [...prevPlants, newPlant]);
+          })
         .catch(error =>{
             console.log(error)
         })
     }
     
-    function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        e.preventDefault()
-        const id = plant.id
-        addToProject(id)
-    }
+    // function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    //     e.preventDefault()
+    //     const id = plant.id
+    //     addToProject(id)
+    // }
 
     return(
         <div key={plant.name}>
@@ -51,7 +56,13 @@ function PlantCard({plant, projectId}: {plant:Plant, projectId:number}){
                     <CardMeta>
                         {plant.type}
                     </CardMeta>
-                    <Button color='green' onClick={(e)=>handleClick(e)}>Add to Project</Button>
+                    <Button
+                        color={isInProject ? 'grey' : 'green'}
+                        onClick={()=>addToProject(plant.id)}
+                        disabled={isInProject} // Disable button if plant is already in the project
+                    >
+                        {isInProject ? 'Already in Project' : 'Add to Project'}
+                    </Button>
                 </CardContent>
             </Card>    
         </div>

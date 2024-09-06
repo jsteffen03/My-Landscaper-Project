@@ -8,10 +8,9 @@ type Plant = {
     img: string;
 }
 
-function SelectedPlantCard({plant, projectId, projectPlants, setProjectPlants}: {plant:any, projectId:number, projectPlants:Plant[], setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>}){
+function SelectedPlantCard({plant, projectId, projectPlants, setProjectPlants}: {plant:Plant, projectId:number, projectPlants:Plant[], setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>}){
 
     function deletePlant(id: number) {
-        console.log(plant)
         fetch(`/api/project/${projectId}/plant`, {
             method: 'DELETE',
             headers: {

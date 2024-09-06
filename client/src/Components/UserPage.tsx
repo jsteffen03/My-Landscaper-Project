@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import {Form, Button, FormField} from 'semantic-ui-react'
+import {Form, Button, FormField, FormTextArea} from 'semantic-ui-react'
 import ProjectCard from './ProjectCard.tsx'
 
 type NewProject = {
@@ -60,7 +60,6 @@ function UserPage({
     }
 
     function handleAddProject(newProject: NewProject): void{
-        console.log(newProject)
         fetch("/api/projects",{
             method:"POST",
             headers:{
@@ -72,25 +71,24 @@ function UserPage({
         .then(data=>{
             const newArr = [...projectData,data]
             setProjectData(newArr)
-            console.log("im here")
+            setNewPTitle("")
+            setNewPDescription("")
         })
     }
 
     function addProject(e?: React.FormEvent<HTMLFormElement>){
         if (e) e.preventDefault();
-        if (user){
+        if (user && newPDescription != "" && newPTitle != "") {
             const newProject = {
                 title: newPTitle,
                 description: newPDescription,
                 user_id: user.id,
                 status: "In Progress"
             }
-            console.log(newProject)
-            console.log(projectData)
             handleAddProject(newProject)
         }
         else {
-            alert("Your not supposed to be here. Please log in.")
+            alert("Please enter a project name and description")
         }
     }
 
@@ -116,11 +114,11 @@ function UserPage({
                         <Button color='black' type='submit'>Submit</Button>
                         <FormField>
                             <label>Project Name</label>
-                            <input type="text" placeholder="Project Name" onChange={(e)=>setNewPTitle(e.target.value)}></input>
+                            <input type="text" value={newPTitle} placeholder="Project Title" onChange={(e)=>setNewPTitle(e.target.value)}></input>
                         </FormField>
                         <FormField>
                             <label>Project Details</label>
-                            <input type="text"  placeholder="Project Details" onChange={(e)=>setNewPDescription(e.target.value)}></input>
+                            <FormTextArea type="text" value={newPDescription} placeholder="Please give a detailed description of your project" onChange={(e)=>setNewPDescription(e.target.value)}></FormTextArea>
                         </FormField>
                     </Form>
                 </div>

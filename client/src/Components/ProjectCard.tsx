@@ -41,7 +41,6 @@ function ProjectCard({project, projectData, setProjectData, setProjectId}:{proje
     function editProject(){
         setProjectId(project.id)
         sessionStorage.setItem('projectId', project.id.toString())
-        console.log(project.id)
         navigate('/project_page')
     }
 
