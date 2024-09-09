@@ -2,7 +2,8 @@
 from flask import request, session, jsonify
 from flask_restful import Resource
 from models import db, User, Plant, Landscaper, Project
-from config import app, db, api
+from config import app, db, api, mail
+from flask_mail import Message
 
 @app.before_request
 def check_credentials():
@@ -10,7 +11,7 @@ def check_credentials():
     if request.path.startswith('/static/'):
         return None
 
-    valid_routes = ("/checksessions","/login_user", "/login_landscaper","/landscapers", "/users")
+    valid_routes = ("/checksessions","/login_user", "/login_landscaper","/landscapers", "/users", "/")
     if request.path not in valid_routes and 'user_id' not in session and 'landscaper_id' not in session:
         return {"error": "please login"},401
     else:
@@ -263,6 +264,43 @@ class CheckSession(Resource):
             return {}, 404
         
 api.add_resource(CheckSession,'/checksessions')
-    
+
+class SendEmail(Resource):
+    def post(self):
+        try:
+            # Get data from the request body
+            data = request.get_json()
+            recipient_email = data.get('recipient_email')
+            user_email = data.get('user_email')
+            subject = data.get('subject')
+            message_body = data.get('message_body')
+            redirect_url ='http://localhost:3000/'
+
+            # Check if all required fields are provided
+            if not recipient_email or not subject or not message_body:
+                return {"error": "Recipient email, subject, and message body are required."}, 400
+
+            html_body = f"""
+            <html>
+                <body>
+                    <p>{message_body}</p>
+                    <a href="{redirect_url}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #ffffff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Go to Website</a>
+                </body>
+            </html>
+            """
+
+            # Create the email message
+            msg = Message(subject, recipients=[recipient_email])
+            msg.html = html_body
+            msg.reply_to = user_email
+            msg.sender = user_email
+
+            mail.send(msg)
+            return {"message": "Email sent successfully!"}, 200
+        except Exception as e:
+            print(e)
+            return {"error": "Failed to send email."}, 500
+api.add_resource(SendEmail, '/send_email')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

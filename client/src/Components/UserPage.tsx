@@ -28,6 +28,9 @@ function UserPage({
     const [userProjects, setUserProjects] = useState<any>([])
     const [newPTitle, setNewPTitle] = useState<string>("")
     const [newPDescription, setNewPDescription] = useState<string>("")
+    const [email, setEmail] = useState<string>("")
+    const [emailHeader, setEmailHeader] = useState<string>("")
+    const [emailAddress, setEmailAddress] = useState<string>("")
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -92,6 +95,29 @@ function UserPage({
         }
     }
 
+    function sendEmail(){
+        fetch('/api/send_email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'Application/json'
+            },
+            body: JSON.stringify({
+                user_email: user.email,
+                recipient_email: emailAddress,
+                subject: emailHeader,
+                message_body: email,
+            }),
+        })
+        .then(r=>r.json())
+        .then(data=>{
+            console.log(data)
+            setEmailHeader("")
+            setEmailAddress("")
+            setEmail("")
+        })
+    }
+
+
     return(
         <div className="container">
             <div className="Header">
@@ -120,6 +146,22 @@ function UserPage({
                             <label>Project Details</label>
                             <FormTextArea type="text" value={newPDescription} placeholder="Please give a detailed description of your project" onChange={(e)=>setNewPDescription(e.target.value)}></FormTextArea>
                         </FormField>
+                    </Form>
+                    <Form>
+                        <h2>Send Email</h2>
+                        <FormField>
+                            <label>Landscaper Email Address</label>
+                            <input type="text" placeholder="Email" onChange={(e)=>setEmailAddress(e.target.value)}/>
+                        </FormField>                        
+                        <FormField>
+                            <label>Email</label>
+                            <input type="text" placeholder="Email" onChange={(e)=>setEmailHeader(e.target.value)}/>
+                        </FormField>
+                        <FormField>
+                            <label>Email Boby</label>
+                            <FormTextArea type="text" placeholder="Email" onChange={(e)=>setEmail(e.target.value)}/>
+                        </FormField>
+                        <Button color='black' onClick={sendEmail}>Submit</Button>
                     </Form>
                 </div>
             </div>

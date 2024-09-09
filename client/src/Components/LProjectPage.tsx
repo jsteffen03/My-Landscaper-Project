@@ -85,7 +85,6 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: {projectId:n
 
     const plantRender = projectPlants?.map((plant:any) => <LSelectedPlantCard key={plant.id} plant={plant}/>)
 
-
     return(
         <div className="container">
             <div className="Header">
