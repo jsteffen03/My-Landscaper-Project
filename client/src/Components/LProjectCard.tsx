@@ -7,7 +7,7 @@ function LProjectCard({project, setProjectId}:{project:any, setProjectId: any}) 
 
     function editProject(){
         setProjectId(project.id)
-        console.log(project.id)
+        sessionStorage.setItem('projectId', project.id.toString())
         navigate('/l_project_page')
     }
 

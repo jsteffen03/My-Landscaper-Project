@@ -73,14 +73,13 @@ function App() {
   let routes: JSX.Element;
 
   // Routes for different user types
-  if (user) {
-    routes = (
+  if (user) {    routes = (
       <Routes>
         <Route path="/user_page" element={
           <UserPage setUser={setUser} user={user} setProjectId={setProjectId}/>
         }/>
         <Route path="/project_page" element={
-          <ProjectPage projectId={projectId} setProjectId={setProjectId} projectPlants={projectPlants} setProjectPlants={setProjectPlants}/>
+          <ProjectPage projectId={projectId} projectPlants={projectPlants} setProjectPlants={setProjectPlants}/>
         }/>
         <Route path="/item_search" element={
           <ItemSearch projectId={projectId} projectPlants={projectPlants} setProjectPlants={setProjectPlants}/>
@@ -97,7 +96,7 @@ function App() {
           <LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper} setProjectId={setProjectId}/>
         }/>
         <Route path="/l_project_page" element={
-          <LProjectPage projectId={projectId} setProjectId={setProjectId}/>
+          <LProjectPage projectId={projectId} projectPlants={projectPlants} setProjectPlants={setProjectPlants}/>
         }/>
         <Route path="*" element={<LandscaperPage landscaper={landscaper} setLandscaper={setLandscaper} setProjectId={setProjectId}/>} />
       </Routes>

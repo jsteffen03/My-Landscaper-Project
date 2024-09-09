@@ -54,7 +54,7 @@ function ItemSearch({projectId, projectPlants, setProjectPlants}: {projectId:num
     const plantRender = plants?.map((plant:Plant) => {
         const isInProject = projectPlants.some((p) => p.id === plant.id);
         return  (
-        <PlantCard key={plant.id} plant={plant} projectId={projectId} projectPlants={plants} setProjectPlants={setProjectPlants} isInProject={isInProject}/>)
+        <PlantCard key={plant.id} plant={plant} projectId={projectId} setProjectPlants={setProjectPlants} isInProject={isInProject}/>)
     })
     
     return (

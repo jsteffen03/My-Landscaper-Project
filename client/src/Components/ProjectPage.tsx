@@ -20,7 +20,7 @@ type Project = {
     plants?: [];
 }
 
-function ProjectPage({projectId, projectPlants, setProjectPlants, setProjectId}: {projectId:number, projectPlants:Plant[], setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>, setProjectId: React.Dispatch<React.SetStateAction<number>>}) {
+function ProjectPage({projectId, projectPlants, setProjectPlants}: {projectId:number, projectPlants:Plant[], setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>}) {
 
     const navigate = useNavigate();
     const [project, setProject] = useState<Project | null>(null)

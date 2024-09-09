@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { CardMeta, CardHeader, CardContent, Card, Button, Image } from 'semantic-ui-react'
 
 type Plant = {
@@ -10,7 +9,7 @@ type Plant = {
 }
 
 
-function PlantCard({plant, projectId, projectPlants, setProjectPlants, isInProject}: {plant:Plant, projectId:number, projectPlants:Plant[], setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>, isInProject: boolean}){
+function PlantCard({plant, projectId, setProjectPlants, isInProject}: {plant:Plant, projectId:number, setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>, isInProject: boolean}){
 
 
     function addToProject(id: number) {
@@ -37,12 +36,6 @@ function PlantCard({plant, projectId, projectPlants, setProjectPlants, isInProje
             console.log(error)
         })
     }
-    
-    // function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    //     e.preventDefault()
-    //     const id = plant.id
-    //     addToProject(id)
-    // }
 
     return(
         <div key={plant.name}>
@@ -59,8 +52,7 @@ function PlantCard({plant, projectId, projectPlants, setProjectPlants, isInProje
                     <Button
                         color={isInProject ? 'grey' : 'green'}
                         onClick={()=>addToProject(plant.id)}
-                        disabled={isInProject} // Disable button if plant is already in the project
-                    >
+                        disabled={isInProject}>
                         {isInProject ? 'Already in Project' : 'Add to Project'}
                     </Button>
                 </CardContent>
