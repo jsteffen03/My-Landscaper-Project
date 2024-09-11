@@ -5,8 +5,8 @@ import LProjectCard from './LProjectCard.tsx'
 import { Project, Landscaper } from '../types';
 
 interface LandscaperPageProps {
-    setLandscaper: React.Dispatch<React.SetStateAction<Landscaper | undefined>>;
-    landscaper: Landscaper | undefined;
+    setLandscaper: React.Dispatch<React.SetStateAction<Landscaper | null>>;
+    landscaper: Landscaper | null;
     setProjectId: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -38,7 +38,7 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
     function handleLogout(){
         fetch('/api/logout',{method:"DELETE"})
         .then(r=>r.json())
-        .then(() => setLandscaper(undefined))
+        .then(() => setLandscaper(null))
         .then(()=>navigate('/'))
     }
 

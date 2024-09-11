@@ -132,6 +132,23 @@ function UserPage({ setUser, user, setProjectId }: UserPageProps) {
                             />
                         </FormField>
                     </Form>
+                    <div>
+                        <h4>Things to include in your project details:</h4>
+                        <ul>                            
+                            <li>What is your vision?</li>
+                            <li>What area of your yard are you landscaping?</li>
+                            <li>Do you want to include plants in your project?</li>
+                            <li>Do you want to include walkways in your project?</li>
+                            <li>Do you want to include a patio in your project?</li>
+                            <li>Do you want to include a fireplace in your project?</li>
+                            <li>Do you want to include a fence in your project?</li>
+                            <li>Do you want to include a water feature in your project?</li>
+                            <li>Do you want to include lights in your project?</li>
+                            <li>Do you want mulch, rock, or grass in your project?</li>
+                            <li>Do you want to include artwork in your project?</li>
+                            <li>Please be as detailed as possible for your project</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

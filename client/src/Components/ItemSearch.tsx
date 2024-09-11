@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import {Button, Card} from 'semantic-ui-react'
+import {Button, Card, Form, FormField, FormSelect} from 'semantic-ui-react'
 import PlantCard from './PlantCard.tsx'
 import { Plant } from '../types';
 
@@ -14,6 +14,10 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
 
     const navigate = useNavigate();
     const [plants, setPlants] = useState<Plant[]>([])
+    const [newProjectPlants, setNewProjectPlants] = useState<Plant[]>(projectPlants)
+    const [filteredPlants, setFilteredPlants] = useState<Plant[]>([])
+    const [search, setSearch] = useState<string>("")
+    const [filter, setFilter] = useState<any>("")
 
     useEffect(() => {
         if (projectId != 0) {
@@ -33,7 +37,7 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
                 console.error('Error fetching data:', error)
             })
         }
-    }, [projectId, setProjectPlants])
+    }, [newProjectPlants])
 
     useEffect(() => {
         fetch('/api/plants')
@@ -47,13 +51,46 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
         })
         .then(data=>{
             setPlants(data)
+            setFilteredPlants(data)
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
     }, [])
 
-    const plantRender = plants?.map((plant:Plant) => {
+    function handleSearch(e?: React.FormEvent<HTMLFormElement>){
+        if (e) e.preventDefault()
+        setFilteredPlants(plants.filter((plant)=>{
+            if (search === "" && filter === "") {
+                return true;
+              }
+            
+              if (search !== "" && plant.name.toLowerCase().includes(search.toLowerCase())) {
+                if (filter === "" || plant.type === filter) {
+                  return true;
+                }
+                return false;
+              }
+            
+              if (filter !== "" && plant.type === filter) {
+                if (search === "" || plant.name.toLowerCase().includes(search.toLowerCase())) {
+                  return true;
+                }
+                return false;
+              }
+            
+              return false;
+        }))
+    }
+
+    const options: any = [
+        { key: 'a', text: '--Select--', value: '' },
+        { key: 'f', text: 'Flowering Tree', value: 'Flowering Tree' },
+        { key: 's', text: 'Shade Tree', value: 'Shade Tree' },
+        { key: 'e', text: 'Evergreen Tree', value: 'Evergreen Tree' }
+    ]
+
+    const plantRender = filteredPlants?.map((plant:Plant) => {
         const isInProject = projectPlants.some((p) => p.id === plant.id);
         return  (
             <PlantCard 
@@ -63,6 +100,7 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
                 projectId={projectId} 
                 setProjectPlants={setProjectPlants} 
                 isInProject={isInProject}
+                setNewProjectPlants={setNewProjectPlants}
             />
         )
     })
@@ -74,7 +112,22 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
                 <Button color='black' onClick={()=>navigate('/project_page')}>Back to Project</Button>
             </div> 
             <div className="Content2">
-                <div className="plants2">Filters</div>
+                <div className="addPlant">
+                    <Form onSubmit={(e)=>handleSearch(e)}>
+                        <h2>Search</h2> 
+                        <Button color='black' type="submit" >Search</Button>
+                        <FormField>
+                            <label>Plant Name</label>
+                            <input type="text" placeholder="Plant Name" onChange={(e)=>setSearch(e.target.value)}></input>
+                        </FormField>
+                        <FormSelect onChange={(e, { value })=>setFilter(value)}
+                            fluid
+                            label='Select Type'
+                            options={options}
+                            placeholder='--Select--'    
+                        />
+                    </Form>
+                </div>
                 <div className="plants">
                     <Card.Group>
                         {plantRender}

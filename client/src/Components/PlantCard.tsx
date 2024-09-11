@@ -7,10 +7,11 @@ interface PlantCardProps {
     setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>;
     projectPlants: Plant[];
     isInProject: boolean;
+    setNewProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>;
 }
 
 
-function PlantCard({plant, projectId, setProjectPlants, projectPlants, isInProject}: PlantCardProps) {
+function PlantCard({plant, projectId, projectPlants, isInProject, setNewProjectPlants}: PlantCardProps) {
 
 
     function addToProject(id: number) {
@@ -31,7 +32,7 @@ function PlantCard({plant, projectId, setProjectPlants, projectPlants, isInProje
                 alert("Failed to add plant to project")
         })
         .then((newPlant: Plant) => {
-            setProjectPlants([...projectPlants, newPlant]);
+            setNewProjectPlants([...projectPlants, newPlant])
           })
         .catch(error =>{
             console.error('There was a problem with the post operation:', error);

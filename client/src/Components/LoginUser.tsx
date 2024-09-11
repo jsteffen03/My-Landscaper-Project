@@ -100,11 +100,11 @@ function LoginUser({ setUser }: LoginUserProps) {
                     <h1>Login</h1>
                     <FormField>
                         <label>Email</label>
-                        <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
+                        <input placeholder='Email' autoComplete="email" onChange={(e)=>setEmail(e.target.value)}/>
                     </FormField>
                     <FormField>
                         <label>Password</label>
-                        <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
+                        <input placeholder='Password' type="password" autoComplete="current-password" onChange={(e)=>setPassword(e.target.value)}/>
                     </FormField>
                     <div className="Button">
                         <Button color='green' type="submit">Login Home Owner</Button>
@@ -123,7 +123,7 @@ function LoginUser({ setUser }: LoginUserProps) {
                     </FormField>
                     <FormField>
                         <label>Password</label>
-                        <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
+                        <input placeholder='Password' type="password"  onChange={(e)=>setPassword(e.target.value)}/>
                     </FormField>
                     <FormField>
                         <label>Verify Password</label>
