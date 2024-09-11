@@ -1,35 +1,16 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import {Button, Card, ListDescription} from 'semantic-ui-react'
+import {Button, Card, List} from 'semantic-ui-react'
 import LSelectedPlantCard from './LSelectedPlantCard.tsx'
+import { Project,  Plant } from '../types';
 
-type Plant = {
-    id: number;
-    name: string;
-    scientific_name: string;
-    type: string;
-    img: string;
+interface LProjectPageProps {
+    projectId: number;
+    projectPlants: Plant[];
+    setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>;
 }
 
-type Project = {
-    id: number;
-    title: string;
-    description: string;
-    status: string;
-    user_id: number;
-    plants?: [];
-    user?: User;
-}
-
-type User = {
-    id: number;
-    email: string;
-    name: string;
-    password: string;
-    projects?: [];
-}
-
-function LProjectPage({projectId, projectPlants, setProjectPlants}: {projectId:number, setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>, projectPlants:Plant[]}) {
+function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPageProps) {
 
     const navigate = useNavigate();
     const [project, setProject] = useState<Project | null>(null)
@@ -46,23 +27,23 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: {projectId:n
                     return r.json()
                 }
                 else {
-                    throw new Error
+                    throw new Error('Failed to fetch data.')
                 }
             })
             .then(data=>{
                 setProject(data)
                 setProjectPlants(data.plants)
             })
-            .catch(()=>{})
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
         }
-    }, [projectId])
+    }, [projectId, setProjectPlants])
 
     useEffect(() => {
         if (projectPlants) {
-            console.log("ran")
             const totalPlants = projectPlants.length;
             setPlantNum(totalPlants);
-            console.log("Total Plants:", totalPlants);
 
             const floweringTrees = projectPlants.filter(
                 (plant: Plant) => plant.type === "Flowering Tree"
@@ -81,21 +62,24 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: {projectId:n
         }
     }, [projectPlants])
 
-    console.log(project)
-
-    const plantRender = projectPlants?.map((plant:any) => <LSelectedPlantCard key={plant.id} plant={plant}/>)
+    const plantRender = projectPlants.map(plant => (
+        <LSelectedPlantCard 
+            key={plant.id}
+            plant={plant}
+        />
+    ))
 
     return(
         <div className="container">
             <div className="Header">
-            <h2>{project?.title} - {project?.user?.name}</h2>
+            <h2>{project?.title} - {project?.user?.name} - {project?.id}</h2>
                 <h1>My Landscaper</h1>
                 <Button color="black" onClick={()=>navigate('/user_page')}>Home</Button> 
             </div> 
             <div className="Content">
                 <div className="MyProjects">
                     <h2>Project Desription</h2>
-                    <ListDescription>{project?.description}</ListDescription>
+                    <List.Description>{project?.description}</List.Description>
                     <h2>Project Status</h2>
                     <p>{project?.status}</p>
                     <h2>Number of Plants</h2>

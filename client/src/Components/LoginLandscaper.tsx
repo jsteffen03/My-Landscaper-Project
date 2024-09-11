@@ -1,14 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'  
 import { FormField, Button, Form } from 'semantic-ui-react'
-
-type Landscaper = {
-    id: number;
-    name: string;
-    company: string;
-    email: string;
-    password: string;
-}
+import { User, Plant, Landscaper } from '../types';
 
 type NewLandscaper = {
     name: string;
@@ -18,7 +11,7 @@ type NewLandscaper = {
 }
 
 interface LoginLandscaperProps {
-    setLandscaper: (landscaper: Landscaper) => void;
+    setLandscaper: React.Dispatch<React.SetStateAction<Landscaper | null>>;
 }
 
 function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
@@ -32,7 +25,7 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
     const [cPassword, setCPassword] = useState<string>("");
     const [sLI, setSLI] = useState<boolean>(false)
 
-    function handleLogin(e?: React.FormEvent<HTMLFormElement>) {
+    function handleLogin(e?: React.FormEvent<HTMLFormElement>): void {
         if (e) e.preventDefault();
         fetch("/api/login_landscaper", {
             method: "POST",
@@ -45,47 +38,57 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
                 stayLoggedIn: sLI
             }),
         })
-        .then(r=>r.json())
+        .then(r => {
+            if(r.ok){
+                return r.json()
+            }
+            else {
+                throw new Error('Failed to fetch data.')
+            }
+        })
         .then(data=>{
-            console.log(data)
             setLandscaper(data)
             navigate('/landscaper_page')
         })
-        .catch(data=>{
+        .catch(()=>{
             alert("Not valid username/password combination. Please try again.")
-            console.log(data)
         })
     }
 
-    function handleCreate(newUser: Omit<NewLandscaper, 'id'>): void {
+    function handleCreate(newLandscaper: NewLandscaper): void {
         fetch("/api/landscapers",{
             method:"POST",
             headers:{
             "Content-Type": "application/json"
             },
-            body: JSON.stringify(newUser)
+            body: JSON.stringify(newLandscaper)
         })
-        .then(r=>r.json())
-        .then(data=>{
-            console.log(data)
+        .then(r => {
+            if(r.ok){
+                return r.json()
+            }
+            else {
+                throw new Error('Failed to post data.')
+            }
+        })
+        .then(()=>{
             handleLogin();
         })
-        .catch(data=>{
-            console.log(data)
-            alert("Not valid username/password")
+        .catch(()=>{
+            alert("An account with this email already exists. Please login.")
         })
     }
 
     function addLandscaper(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault()
         if (cPassword === password) {
-            const NewLandscaper: Omit<NewLandscaper, 'id'> = {
+            const newLandscaper: NewLandscaper = {
                 name: name,
                 company: company,
                 email: email,
                 password: password
             };
-            handleCreate(NewLandscaper);
+            handleCreate(newLandscaper);
         }
         else {
             alert("Passwords do not match");
@@ -104,11 +107,11 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
                 </FormField>
                 <FormField>
                     <label>Password</label>
-                    <input placeholder='Password' onChange={(e)=>setPassword(e.target.value)}/>
+                    <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
                 </FormField>
                 <div className="Button">
                     <Button color='green' type="submit">Login Landscaper</Button>
-                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Rember Me" : "Don't Rember Me"}</Button>
+                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Remember Me" : "Don't Remember Me"}</Button>
                 </div>
             </Form>
             <Form className="CreateAccount" onSubmit={(e)=>addLandscaper(e)}>
@@ -127,11 +130,11 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
                 </FormField>
                 <FormField>
                     <label>Password</label>
-                    <input placeholder='Password' onChange={(e)=>setPassword(e.target.value)}/>
+                    <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
                 </FormField>
                 <FormField>
                     <label>Verify Password</label>
-                    <input placeholder='Password' onChange={(e)=>setCPassword(e.target.value)}/>
+                    <input placeholder='Password' type="password" onChange={(e)=>setCPassword(e.target.value)}/>
                 </FormField>
                 <div className="Button">
                     <Button color='green' type="submit">Create a Landscaper Acount</Button>

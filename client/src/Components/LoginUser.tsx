@@ -1,23 +1,16 @@
-// import { useNavigate} from "react-router-dom"
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'  
 import { FormField, Button, Form } from 'semantic-ui-react'
+import { User } from '../types';
 
-type User = {
-    id: number;
-    email: string;
-    name: string;
-    password: string;
-}
-
-type NewUser = {
+type newUser = {
     name: string;
     email: string;
     password: string;
 }
 
 interface LoginUserProps {
-    setUser: (user: User) => void;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 function LoginUser({ setUser }: LoginUserProps) {
@@ -30,7 +23,7 @@ function LoginUser({ setUser }: LoginUserProps) {
     const [cPassword, setCPassword] = useState<string>("");
     const [sLI, setSLI] = useState<boolean>(false);
 
-    function handleLogin(e?: React.FormEvent<HTMLFormElement>){
+    function handleLogin(e?: React.FormEvent<HTMLFormElement>): void {
         if (e) e.preventDefault();
         fetch("/api/login_user", {
             method: "POST",
@@ -43,19 +36,24 @@ function LoginUser({ setUser }: LoginUserProps) {
                 stayLoggedIn: sLI
             }),
         })
-        .then(r=>r.json())
+        .then(r => {
+            if(r.ok){
+                return r.json()
+            }
+            else {
+                throw new Error('Failed to post data.')
+            }
+        })
         .then(data=>{
-            console.log(data)
             setUser(data)
             navigate('/user_page')
         })
-        .catch(data=>{
+        .catch(()=>{
             alert("Not valid username/password combination. Please try again.")
-            console.log(data)
         })
     }
 
-    function handleCreate(newUser: Omit<NewUser, 'id'>): void {
+    function handleCreate(newUser: newUser): void {
         fetch("/api/users",{
             method:"POST",
             headers:{
@@ -63,21 +61,26 @@ function LoginUser({ setUser }: LoginUserProps) {
             },
             body: JSON.stringify(newUser)
         })
-        .then(r=>r.json())
-        .then(data=>{
-            console.log(data)
+        .then(r => {
+            if(r.ok){
+                return r.json()
+            }
+            else {
+                throw new Error('Failed to post data.')
+            }
+        })
+        .then(()=>{
             handleLogin();
         })
-        .catch(data=>{
-            console.log(data)
-            alert("An account with this email already exsists. Please login.")
+        .catch(()=>{
+            alert("An account with this email already exists. Please login.")
         })
     }
 
     function addUser(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault()
         if (cPassword === password) {
-            const newUser: Omit<NewUser, 'id'> = {
+            const newUser: newUser = {
                 name: name,
                 email: email,
                 password: password
@@ -91,46 +94,46 @@ function LoginUser({ setUser }: LoginUserProps) {
 
     return(
         <div className="body">
-        <h1 className="Title">My Landscaper</h1>
-        <div className="Container"> 
-            <Form className="Login" onSubmit={(e)=>handleLogin(e)}>
-                <h1>Login</h1>
-                <FormField>
-                    <label>Email</label>
-                    <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Password</label>
-                    <input placeholder='Password' onChange={(e)=>setPassword(e.target.value)}/>
-                </FormField>
-                <div className="Button">
-                    <Button color='green' type="submit">Login Home Owner</Button>
-                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Rember Me" : "Don't Rember Me"}</Button>
-                </div>
-            </Form>
-            <Form className="CreateAccount" onSubmit={(e)=>addUser(e)}>
-                <h1>Create Account</h1>
-                <FormField>
-                    <label>Name</label>
-                    <input placeholder='John Doe' onChange={(e)=>setName(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Email</label>
-                    <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Password</label>
-                    <input placeholder='Password' onChange={(e)=>setPassword(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Verify Password</label>
-                    <input placeholder='Confirm Password' onChange={(e)=>setCPassword(e.target.value)}/>
-                </FormField>
-                <div className="Button">
-                    <Button color='green' type="submit">Create a Home Owner Acount</Button>
-                </div>  
-            </Form>
-        </div>
+            <h1 className="Title">My Landscaper</h1>
+            <div className="Container"> 
+                <Form className="Login" onSubmit={(e)=>handleLogin(e)}>
+                    <h1>Login</h1>
+                    <FormField>
+                        <label>Email</label>
+                        <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Password</label>
+                        <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
+                    </FormField>
+                    <div className="Button">
+                        <Button color='green' type="submit">Login Home Owner</Button>
+                        <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Remember Me" : "Don't Remember Me"}</Button>
+                    </div>
+                </Form>
+                <Form className="CreateAccount" onSubmit={(e)=>addUser(e)}>
+                    <h1>Create Account</h1>
+                    <FormField>
+                        <label>Name</label>
+                        <input placeholder='John Doe' onChange={(e)=>setName(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Email</label>
+                        <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Password</label>
+                        <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Verify Password</label>
+                        <input placeholder='Confirm Password' type="password" onChange={(e)=>setCPassword(e.target.value)}/>
+                    </FormField>
+                    <div className="Button">
+                        <Button color='green' type="submit">Create a Home Owner Acount</Button>
+                    </div>  
+                </Form>
+            </div>
         </div>
     )
 }       

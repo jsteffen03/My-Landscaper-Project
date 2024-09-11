@@ -7,7 +7,6 @@ from flask_mail import Message
 
 @app.before_request
 def check_credentials():
-
     if request.path.startswith('/static/'):
         return None
 
@@ -81,6 +80,18 @@ class Landscapers(Resource):
             return jsonify({"Error": "Invalid username or password"}), 400
     
 api.add_resource(Landscapers, '/landscapers')
+
+class OneLandscaper(Resource):
+    def get(self, id):
+        landscaper = Landscaper.query.filter(Landscaper.id == id).first()
+        if landscaper:
+            return landscaper.to_dict()
+        else:
+            return {
+                "error": "not valid id"
+            },400
+
+api.add_resource(OneLandscaper, '/landscapers/<int:id>')
 
 class Projects(Resource):
     def get(self):
@@ -210,8 +221,25 @@ class AddlandscaperToProject(Resource):
             else:
                 return {"error": "Project or landscaper not found"}, 404
         except Exception as e:
-            print(e)
             return {"error": "Failed to add item to project"}, 500
+        
+    def delete(self, project_id):
+        try:
+            data = request.get_json()
+            landscaper_id = data.get('landscaper_id')
+
+            project = Project.query.get(project_id)
+            landscaper = Landscaper.query.get(landscaper_id)
+
+            if project and landscaper:
+                project.landscapers.remove(landscaper)
+                db.session.commit()
+                return {"message": "Landscaper removed from project"}, 200
+            else:
+                return {"error": "Project or item not found"}, 404
+        except Exception as e:
+            print(e)
+            return {"error": "Failed to remove item from project"}, 500
         
 api.add_resource(AddlandscaperToProject, '/project/<int:project_id>/landscaper')
 
@@ -242,7 +270,7 @@ class LoginLandscaper(Resource):
             return jsonify(landscaper.to_dict()) 
         else:
             return jsonify({"Error": "Invalid username or password"}), 400
-        
+           
 api.add_resource(LoginLandscaper, '/login_landscaper')
 
 class Logout(Resource):
@@ -268,38 +296,103 @@ api.add_resource(CheckSession,'/checksessions')
 class SendEmail(Resource):
     def post(self):
         try:
-            # Get data from the request body
             data = request.get_json()
             recipient_email = data.get('recipient_email')
             user_email = data.get('user_email')
+            user_name = data.get('user_name')
             subject = data.get('subject')
-            message_body = data.get('message_body')
-            redirect_url ='http://localhost:3000/'
-
-            # Check if all required fields are provided
-            if not recipient_email or not subject or not message_body:
-                return {"error": "Recipient email, subject, and message body are required."}, 400
+            project_id = data.get('project_id')
+            sender_email = data.get('user_email')
+            company_name = data.get('company_name')
+            redirect_url = 'http://localhost:3000/'
 
             html_body = f"""
+            <!DOCTYPE html>
             <html>
-                <body>
-                    <p>{message_body}</p>
-                    <a href="{redirect_url}" style="display: inline-block; padding: 10px 20px; font-size: 16px; font-weight: bold; color: #ffffff; background-color: #007bff; text-decoration: none; border-radius: 5px;">Go to Website</a>
-                </body>
+            <head>
+                <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    color: #333;
+                    margin: 0;
+                    padding: 0;
+                }}
+                .email-container {{
+                    width: 100%;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                }}
+                .header {{
+                    background-color: #4caf50;
+                    color: #ffffff;
+                    padding: 10px;
+                    text-align: center;
+                }}
+                .content {{
+                    margin: 20px 0;
+                }}
+                .button {{
+                    display: inline-block;
+                    padding: 10px 20px;
+                    background-color: #4caf50;
+                    color: #ffffff;
+                    text-decoration: none;
+                    border-radius: 5px;
+                }}
+                .footer {{
+                    text-align: center;
+                    margin-top: 20px;
+                    font-size: 12px;
+                    color: #888;
+                }}
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                <div class="header">
+                    <h1>Welcome to My Landscaper</h1>
+                </div>
+                <div class="content">
+                    <p>Hello {company_name},</p>
+                    <p>
+                    I hope this email finds you well. My name is {user_name}, and I would
+                    like to invite you to place a bid on my upcoming landscaping project
+                    through My Landscaper. I have outlined my project details and selected
+                    specific items that I would like to incorporate. You can view the full
+                    description of my project and the items chosen by visiting My
+                    Landscaper.
+                    </p>
+                    <p>To view and bid on my project, please use the following project code: {project_id}.</p>
+                    <p>I look forward to the possibility of working together and discussing my vision further.</p>
+                    <p>Best regards,</p>
+                    <p>{user_name}</p>
+                    <p>Click the button below to log into My Landscaper and view my project.</p>
+                    <a href="{redirect_url}" class="button">My Landscaper</a>
+                </div>
+                <div class="footer">
+                    <p>&copy; 2024 My Landscaper. All rights reserved.</p>
+                </div>
+                </div>
+            </body>
             </html>
             """
 
+
             # Create the email message
-            msg = Message(subject, recipients=[recipient_email])
+            msg = Message(subject, recipients=[recipient_email], sender=sender_email)
             msg.html = html_body
             msg.reply_to = user_email
-            msg.sender = user_email
 
             mail.send(msg)
             return {"message": "Email sent successfully!"}, 200
         except Exception as e:
             print(e)
             return {"error": "Failed to send email."}, 500
+        
 api.add_resource(SendEmail, '/send_email')
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ function Home(){
     const navigate = useNavigate()
     
     return(
-        <div className="body">
+      <div className="body">
         <h1 className="Title">My Landscaper</h1>
         <div className="Homepage">
           <h2 className="About">Welcome to My Landscaper</h2>

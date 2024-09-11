@@ -1,15 +1,16 @@
-import { CardMeta, CardHeader, CardContent, Card, Button, Image } from 'semantic-ui-react'
+import { Card, Button, Image } from 'semantic-ui-react'
+import { Plant } from '../types';
 
-type Plant = {
-    id: number;
-    name: string;
-    scientific_name: string;
-    type: string;
-    img: string;
+interface PlantCardProps {
+    plant: Plant;
+    projectId: number;
+    setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>;
+    projectPlants: Plant[];
+    isInProject: boolean;
 }
 
 
-function PlantCard({plant, projectId, setProjectPlants, isInProject}: {plant:Plant, projectId:number, setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>, isInProject: boolean}){
+function PlantCard({plant, projectId, setProjectPlants, projectPlants, isInProject}: PlantCardProps) {
 
 
     function addToProject(id: number) {
@@ -30,35 +31,31 @@ function PlantCard({plant, projectId, setProjectPlants, isInProject}: {plant:Pla
                 alert("Failed to add plant to project")
         })
         .then((newPlant: Plant) => {
-            setProjectPlants((prevPlants) => [...prevPlants, newPlant]);
+            setProjectPlants([...projectPlants, newPlant]);
           })
         .catch(error =>{
-            console.log(error)
+            console.error('There was a problem with the post operation:', error);
+            alert('There was an error adding the plant to the project.');
         })
     }
 
-    return(
-        <div key={plant.name}>
-            <Card>
-            <Image alt={plant.name} src={plant.img}/>
-                <CardContent>
-                    <CardHeader>{plant.name}</CardHeader>
-                    <CardMeta>
-                        {plant.scientific_name}
-                    </CardMeta>
-                    <CardMeta>
-                        {plant.type}
-                    </CardMeta>
-                    <Button
-                        color={isInProject ? 'grey' : 'green'}
-                        onClick={()=>addToProject(plant.id)}
-                        disabled={isInProject}>
-                        {isInProject ? 'Already in Project' : 'Add to Project'}
-                    </Button>
-                </CardContent>
-            </Card>    
-        </div>
-    )
+    return (
+        <Card>
+            <Image alt={plant.name} src={plant.img} />
+            <Card.Content>
+                <Card.Header>{plant.name}</Card.Header>
+                <Card.Meta>{plant.scientific_name}</Card.Meta>
+                <Card.Meta>{plant.type}</Card.Meta>
+                <Button
+                    color={isInProject ? 'grey' : 'green'}
+                    onClick={() => addToProject(plant.id)}
+                    disabled={isInProject}
+                >
+                    {isInProject ? 'Already in Project' : 'Add to Project'}
+                </Button>
+            </Card.Content>
+        </Card>
+    );
 }
 
 export default PlantCard
