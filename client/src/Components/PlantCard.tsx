@@ -10,11 +10,11 @@ interface PlantCardProps {
     setNewProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>;
 }
 
-
+//Renders all plants in database
 function PlantCard({plant, projectId, projectPlants, isInProject, setNewProjectPlants}: PlantCardProps) {
 
 
-    function addToProject(id: number) {
+    function addToProject(id: number) { //Adds plant to project
         fetch(`/api/project/${projectId}/plant`, {
             method: 'POST',
             headers: {

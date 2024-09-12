@@ -13,15 +13,15 @@ interface LProjectPageProps {
 function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPageProps) {
 
     const navigate = useNavigate();
-    const [project, setProject] = useState<Project | null>(null)
-    const [plantNum, setPlantNum] = useState<number>(0)
-    const [floweringTreesCount, setFloweringTreesCount] = useState<number>(0);
-    const [shadeTreesCount, setShadeTreesCount] = useState<number>(0);
-    const [evergreenTreesCount, setEvergreenTreesCount] = useState<number>(0);
-    const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [newStatus, setNewStatus] = useState<string>('');
+    const [project, setProject] = useState<Project | null>(null) //current project
+    const [plantNum, setPlantNum] = useState<number>(0) //total number of plants
+    const [floweringTreesCount, setFloweringTreesCount] = useState<number>(0); //number of flowering trees
+    const [shadeTreesCount, setShadeTreesCount] = useState<number>(0); //number of shade trees
+    const [evergreenTreesCount, setEvergreenTreesCount] = useState<number>(0); //number of evergreen trees
+    const [isEditing, setIsEditing] = useState<boolean>(false); //whether the project is being edited
+    const [newStatus, setNewStatus] = useState<string>(''); //new project status
 
-    useEffect(() => {
+    useEffect(() => { //fetch current project data
         if (projectId != 0) {
             fetch(`/api/project/${projectId}`)
             .then(r=>{
@@ -42,7 +42,7 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPage
         }
     }, [projectId, setProjectPlants])
 
-    useEffect(() => {
+    useEffect(() => { //update plant counts
         if (projectPlants) {
             const totalPlants = projectPlants.length;
             setPlantNum(totalPlants);
@@ -64,7 +64,7 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPage
         }
     }, [projectPlants])
 
-    const handleEditSubmit = () => {
+    const handleEditSubmit = () => { //Edits status of project
         const updatedProject: Partial<Project> = {};
         if (newStatus !== project?.status) {
             updatedProject.status = newStatus;
@@ -96,7 +96,7 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPage
     }
 
 
-    const plantRender = projectPlants.map(plant => (
+    const plantRender = projectPlants.map(plant => ( //Renders project plants
         <LSelectedPlantCard 
             key={plant.id}
             plant={plant}

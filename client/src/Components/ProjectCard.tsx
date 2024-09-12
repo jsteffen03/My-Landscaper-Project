@@ -12,15 +12,15 @@ interface ProjectCardProps {
     user: User;
 }
 
-
+//Renders project cards for each current user project
 function ProjectCard({project, projectData, setProjectData, setProjectId, user}: ProjectCardProps) {
 
     const navigate = useNavigate();
-    const [emailAddress, setEmailAddress] = useState<string>("")
-    const [sendingEmail, setSendingEmail] = useState<boolean>(false)
-    const [companyName, setCompanyName] = useState<string>("")
+    const [emailAddress, setEmailAddress] = useState<string>("") //email address for sending project
+    const [sendingEmail, setSendingEmail] = useState<boolean>(false) //controls email form
+    const [companyName, setCompanyName] = useState<string>("") //company name for sending project
 
-    function deleteProject(){
+    function deleteProject(){ //Deletes project from database
         fetch(`/api/project/${project.id}`, {
             method: 'DELETE',
         })
@@ -39,7 +39,7 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
         });
     }
 
-    function showDeleteConfirmation() {
+    function showDeleteConfirmation() { //Shows delete confirmation
         confirmAlert({
             title: 'Confirm to Delete Project',
             message: 'Are you sure you want to delete this project?',
@@ -56,13 +56,13 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
         });
     }
 
-    function editProject(){
+    function editProject(){ //saves project id to storage and navigates to project page
         setProjectId(project.id)
         sessionStorage.setItem('projectId', project.id.toString())
         navigate('/project_page')
     }
 
-    function sendEmail(){
+    function sendEmail(){ //sends email to landscape company
         const emailSubject = `Project Invitation - ${project.title} - My Landscaper`;
         fetch('/api/send_email', {
             method: 'POST',
@@ -84,10 +84,10 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
             setCompanyName("")
             setEmailAddress("")
         })
-        .then(()=>{
+        .then(()=>{ //Changes status of project
             const updatedProject: Partial<Project> = {};
             updatedProject.status = "Email Sent - Awaiting Confirmation";
-            fetch(`/api/project/${project.id}`, {
+            fetch(`/api/project/${project.id}`, { 
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
                     }
                     return proj;
                 });
-                setProjectData(updatedProjects);
+                setProjectData(updatedProjects); //updates project data
             })
             .catch(error => {
                 console.error('Error updating project:', error);
@@ -119,7 +119,7 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
         });
     }
 
-    const landscapers = project?.landscapers?.map(landscaper =>{
+    const landscapers = project?.landscapers?.map(landscaper =>{ //Renders project's landscapers
         return (
             <div key={landscaper.id}>
                 <p>{landscaper.name}</p>

@@ -11,17 +11,18 @@ interface ProjectPageProps {
 }
 
 function ProjectPage({ projectId, projectPlants, setProjectPlants }: ProjectPageProps) {
+    
     const navigate = useNavigate()
-    const [project, setProject] = useState<Project | null>(null)
-    const [isEditing, setIsEditing] = useState<boolean>(false)
-    const [newDescription, setNewDescription] = useState<string>('')
-    const [newTitle, setNewTitle] = useState<string>('')
-    const [plantNum, setPlantNum] = useState<number>(0)
-    const [floweringTreesCount, setFloweringTreesCount] = useState<number>(0)
-    const [shadeTreesCount, setShadeTreesCount] = useState<number>(0)
-    const [evergreenTreesCount, setEvergreenTreesCount] = useState<number>(0)
+    const [project, setProject] = useState<Project | null>(null) //current project
+    const [isEditing, setIsEditing] = useState<boolean>(false) //whether the project is being edited
+    const [newDescription, setNewDescription] = useState<string>('') //new project description
+    const [newTitle, setNewTitle] = useState<string>('') //new project title
+    const [plantNum, setPlantNum] = useState<number>(0) //total number of plants
+    const [floweringTreesCount, setFloweringTreesCount] = useState<number>(0) //number of flowering trees
+    const [shadeTreesCount, setShadeTreesCount] = useState<number>(0) //number of shade trees
+    const [evergreenTreesCount, setEvergreenTreesCount] = useState<number>(0) //number of evergreen trees
 
-    useEffect(() => {
+    useEffect(() => { //fetch current project data
         if (projectId !== 0) {
             fetch(`/api/project/${projectId}`)
             .then(response => {
@@ -34,8 +35,8 @@ function ProjectPage({ projectId, projectPlants, setProjectPlants }: ProjectPage
             .then(data => {
                 setProject(data);
                 setProjectPlants(data.plants || []);
-                setNewDescription(data.description);
-                setNewTitle(data.title);
+                setNewDescription(data.description); //set project description for editing
+                setNewTitle(data.title); //set project title for editing
             })
             .catch(error => {
                 console.error('Error fetching data:', error)
@@ -43,7 +44,7 @@ function ProjectPage({ projectId, projectPlants, setProjectPlants }: ProjectPage
         }
     }, [projectId, setProjectPlants]);
 
-    const handleEditSubmit = () => {
+    const handleEditSubmit = () => { //post new project data when editing
         const updatedProject: Partial<Project> = {};
         if (newTitle !== project?.title) {
             updatedProject.title = newTitle;
@@ -77,7 +78,7 @@ function ProjectPage({ projectId, projectPlants, setProjectPlants }: ProjectPage
         })
     }
 
-    useEffect(() => {
+    useEffect(() => { //count number of plants
         if (projectPlants) {
             const totalPlants = projectPlants.length;
             setPlantNum(totalPlants);
@@ -99,7 +100,7 @@ function ProjectPage({ projectId, projectPlants, setProjectPlants }: ProjectPage
         }
     }, [projectPlants])
 
-    const plantRender = projectPlants.map((plant: Plant) => (
+    const plantRender = projectPlants.map((plant: Plant) => ( //render selected plants
         <SelectedPlantCard key={plant.id} plant={plant} projectId={projectId} projectPlants={projectPlants} setProjectPlants={setProjectPlants} />
     ))
 

@@ -18,14 +18,14 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
 
     const navigate = useNavigate();
 
-    const [name, setName] = useState<string>("");
-    const [company, setCompany] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [cPassword, setCPassword] = useState<string>("");
-    const [sLI, setSLI] = useState<boolean>(false)
+    const [name, setName] = useState<string>(""); //name
+    const [company, setCompany] = useState<string>(""); //company
+    const [email, setEmail] = useState<string>(""); //email
+    const [password, setPassword] = useState<string>(""); //password
+    const [cPassword, setCPassword] = useState<string>(""); //confirm password
+    const [sLI, setSLI] = useState<boolean>(false) //stay logged in
 
-    function handleLogin(e?: React.FormEvent<HTMLFormElement>): void {
+    function handleLogin(e?: React.FormEvent<HTMLFormElement>): void { //handles login
         if (e) e.preventDefault();
         fetch("/api/login_landscaper", {
             method: "POST",
@@ -55,7 +55,7 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
         })
     }
 
-    function handleCreate(newLandscaper: NewLandscaper): void {
+    function handleCreate(newLandscaper: NewLandscaper): void { //handles creating new landscaper on backend
         fetch("/api/landscapers",{
             method:"POST",
             headers:{
@@ -79,7 +79,7 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
         })
     }
 
-    function addLandscaper(e: React.FormEvent<HTMLFormElement>){
+    function addLandscaper(e: React.FormEvent<HTMLFormElement>){ //handles creating new landscaper
         e.preventDefault()
         if (cPassword === password) {
             const newLandscaper: NewLandscaper = {

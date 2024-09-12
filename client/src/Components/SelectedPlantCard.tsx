@@ -8,9 +8,10 @@ interface SelectedPlantCardProps {
     setProjectPlants: React.Dispatch<React.SetStateAction<Plant[]>>
 }
 
+//Plant cards for project plants
 function SelectedPlantCard({ plant, projectId, projectPlants, setProjectPlants }: SelectedPlantCardProps) {
 
-    const deletePlant = (id: number) => {
+    const deletePlant = (id: number) => { //Deletes plant from project
         fetch(`/api/project/${projectId}/plant`, {
             method: 'DELETE',
             headers: {

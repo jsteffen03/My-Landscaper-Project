@@ -11,17 +11,18 @@ interface LProjectCardProps {
     landscaperId: number | undefined;
 }
 
+//Renders project cards for each current user project
 function LProjectCard({ project, setProjectId, landProject, setLandProject, landscaperId}: LProjectCardProps) {
 
     const navigate = useNavigate();
 
-    function editProject(){
+    function editProject(){ //saves project id to storage and navigates to project page
         setProjectId(project.id)
         sessionStorage.setItem('projectId', project.id.toString())
         navigate('/l_project_page')
     }
 
-    function deleteProject(){
+    function deleteProject(){ //Deletes project from landscaper side
         fetch(`/api/project/${project.id}/landscaper`, {
             method: 'DELETE',
             headers: {
@@ -46,8 +47,8 @@ function LProjectCard({ project, setProjectId, landProject, setLandProject, land
         });
     }
 
-    function showDeleteConfirmation() {
-        confirmAlert({
+    function showDeleteConfirmation() { //Shows delete confirmation
+        confirmAlert({ 
             title: 'Confirm to Delete Project',
             message: 'Are you sure you want to delete this project?',
             buttons: [

@@ -4,7 +4,7 @@ import '../styles.css'
 
 function Home(){
 
-  //renders home
+  //renders home screen for website
     const navigate = useNavigate()
     
     return(

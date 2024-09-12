@@ -17,13 +17,13 @@ function LoginUser({ setUser }: LoginUserProps) {
 
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [name, setName] = useState<string>("");
-    const [cPassword, setCPassword] = useState<string>("");
-    const [sLI, setSLI] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>(""); //email
+    const [password, setPassword] = useState<string>(""); //password
+    const [name, setName] = useState<string>(""); //name
+    const [cPassword, setCPassword] = useState<string>(""); //confirm password
+    const [sLI, setSLI] = useState<boolean>(false); //stay logged in
 
-    function handleLogin(e?: React.FormEvent<HTMLFormElement>): void {
+    function handleLogin(e?: React.FormEvent<HTMLFormElement>): void { //handles login
         if (e) e.preventDefault();
         fetch("/api/login_user", {
             method: "POST",
@@ -53,7 +53,7 @@ function LoginUser({ setUser }: LoginUserProps) {
         })
     }
 
-    function handleCreate(newUser: newUser): void {
+    function handleCreate(newUser: newUser): void { //handles creating new user
         fetch("/api/users",{
             method:"POST",
             headers:{
@@ -77,7 +77,7 @@ function LoginUser({ setUser }: LoginUserProps) {
         })
     }
 
-    function addUser(e: React.FormEvent<HTMLFormElement>){
+    function addUser(e: React.FormEvent<HTMLFormElement>){ //adds new user
         e.preventDefault()
         if (cPassword === password) {
             const newUser: newUser = {

@@ -11,13 +11,14 @@ import ItemSearch from './Components/ItemSearch';
 import LProjectPage from './Components/LProjectPage';
 import { User, Plant, Landscaper } from './types';
 
-function App() {
-  const [user, setUser] = useState<User | null>(null);
-  const [landscaper, setLandscaper] = useState<Landscaper | null>(null);
-  const [projectId, setProjectId] = useState<number>(0);
-  const [projectPlants, setProjectPlants] = useState<Plant[]>([]);
+function App() { 
 
-  useEffect(() => {
+  const [user, setUser] = useState<User | null>(null); //Sets current user upon login
+  const [landscaper, setLandscaper] = useState<Landscaper | null>(null); //Sets current landscaper upon login
+  const [projectId, setProjectId] = useState<number>(0); //Sets current project Id for future fetches
+  const [projectPlants, setProjectPlants] = useState<Plant[]>([]); //Sets current project plants
+
+  useEffect(() => { //Grabs projectId from sessionStorage if any
     const storedProjectId = sessionStorage.getItem('projectId');
     if (storedProjectId) {
       const projectIdAsInt = parseInt(storedProjectId, 10);
@@ -25,7 +26,7 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { //Checks if user is logged in
     fetch('/api/checksessions')
       .then((r) => {
         if (r.ok) {
@@ -44,9 +45,9 @@ function App() {
       .catch((error) => console.error('Error fetching session data:', error));
   }, []);
 
-  let routes: JSX.Element;
+  let routes: JSX.Element; //Routes for different users
 
-  if (user) {
+  if (user) { //User valid routes
     routes = (
       <Routes>
         <Route
@@ -68,7 +69,7 @@ function App() {
         <Route path="*" element={<UserPage setUser={setUser} user={user} setProjectId={setProjectId} />} />
       </Routes>
     );
-  } else if (landscaper) {
+  } else if (landscaper) { //Landscaper valid routes
     routes = (
       <Routes>
         <Route
@@ -87,7 +88,7 @@ function App() {
         />
       </Routes>
     );
-  } else {
+  } else { //Login routes
     routes = (
       <Routes>
         <Route path="/" element={<Home />} />
@@ -98,7 +99,7 @@ function App() {
     );
   }
 
-  return (
+  return ( 
     <div className="body">
       <BrowserRouter>{routes}</BrowserRouter>
     </div>

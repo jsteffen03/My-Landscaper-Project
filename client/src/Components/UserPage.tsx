@@ -18,13 +18,14 @@ interface UserPageProps {
 }
 
 function UserPage({ setUser, user, setProjectId }: UserPageProps) {
-    const [projectData, setProjectData] = useState<Project[]>([]);
-    const [userProjects, setUserProjects] = useState<Project[]>([]);
-    const [newPTitle, setNewPTitle] = useState<string>('');
-    const [newPDescription, setNewPDescription] = useState<string>('');
+
+    const [projectData, setProjectData] = useState<Project[]>([]); // all projects
+    const [userProjects, setUserProjects] = useState<Project[]>([]); // projects for user
+    const [newPTitle, setNewPTitle] = useState<string>(''); // new project title for new project
+    const [newPDescription, setNewPDescription] = useState<string>(''); // new project description for new project
     const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect(() => { // get all projects
         fetch('/api/projects')
             .then(r => {
                 if (r.ok) {
@@ -39,20 +40,20 @@ function UserPage({ setUser, user, setProjectId }: UserPageProps) {
             .catch(() => { });
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { // gets projects for user
         if (user) {
             setUserProjects(projectData.filter((project: Project) => project.user_id === user.id));
         }
     }, [projectData, user]);
 
-    const handleLogout = () => {
+    const handleLogout = () => {  
         fetch('/api/logout', { method: "DELETE" })
             .then(r => r.json())
             .then(() => setUser(null))
             .then(() => navigate('/'));
     };
 
-    const handleAddProject = (newProject: newProject): void => {
+    const handleAddProject = (newProject: newProject): void => { //Adds new project to database
         fetch("/api/projects", {
             method: "POST",
             headers: {
@@ -68,7 +69,7 @@ function UserPage({ setUser, user, setProjectId }: UserPageProps) {
             });
     };
 
-    const addProject = (e?: React.FormEvent<HTMLFormElement>) => {
+    const addProject = (e?: React.FormEvent<HTMLFormElement>) => { // adds new project
         if (e) e.preventDefault();
         if (user && newPDescription !== "" && newPTitle !== "") {
             const newProject: newProject = {
@@ -83,7 +84,7 @@ function UserPage({ setUser, user, setProjectId }: UserPageProps) {
         }
     };
 
-    const projectRender = userProjects.map((project: Project) => (
+    const projectRender = userProjects.map((project: Project) => ( //Renders project cards for current user
         <ProjectCard 
             key={project.id} 
             project={project} 

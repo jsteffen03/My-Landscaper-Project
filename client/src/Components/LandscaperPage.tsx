@@ -13,10 +13,10 @@ interface LandscaperPageProps {
 function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPageProps) {
 
     const navigate = useNavigate();
-    const [newPID, setNewPID] = useState<number>(0)
-    const [landProject, setLandProject] = useState<Project[]>([])
+    const [newPID, setNewPID] = useState<number>(0) //new project id to receive projects
+    const [landProject, setLandProject] = useState<Project[]>([]) //landscaper's projects
 
-    useEffect(() => {
+    useEffect(() => { // get all projects
         if (landscaper) {
             fetch(`/api/landscapers/${landscaper.id}`)
                 .then((r) => {
@@ -27,7 +27,7 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
                     }
                 })
                 .then((data) => {
-                    setLandProject(data.projects);
+                    setLandProject(data.projects); 
                 })
                 .catch((error) => {
                     console.error('Error fetching landscaper data:', error);
@@ -35,14 +35,14 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
         }
     }, [landscaper]);
 
-    function handleLogout(){
+    function handleLogout(){ //handles logout
         fetch('/api/logout',{method:"DELETE"})
         .then(r=>r.json())
         .then(() => setLandscaper(null))
         .then(()=>navigate('/'))
     }
 
-    function addProject(e: React.FormEvent<HTMLFormElement>): void {
+    function addProject(e: React.FormEvent<HTMLFormElement>): void { //Handles rceiving new project from user
         e.preventDefault();
         fetch(`/api/project/${newPID}/landscaper`,{
             method: 'POST',
@@ -57,7 +57,7 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
             }
             return response.json();
         })
-        .then(()=>{
+        .then(()=>{ //handles adding new project to database
             fetch(`/api/project/${newPID}`)
             .then(r=>{
                 if(r.ok){
@@ -74,7 +74,7 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
                 console.error('There was a problem with the second fetch:', error);
             });
         })
-        .then(()=>{
+        .then(()=>{ //handles updating project status
             const updatedProject: Partial<Project> = {};
             updatedProject.status = "Viewed";
             fetch(`/api/project/${newPID}`, {
@@ -110,7 +110,7 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
         });
     }
     
-    const projectRender = landProject.map((project:any) => (
+    const projectRender = landProject.map((project:any) => ( //Renders projects
             <LProjectCard 
             key={project.id} 
             project={project} 

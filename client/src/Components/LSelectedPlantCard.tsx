@@ -1,6 +1,7 @@
 import { Card, Image } from 'semantic-ui-react';
 import { Plant } from '../types';
 
+//Renders selected plant for project
 function LSelectedPlantCard({ plant }: { plant: Plant }) {
     return (
         <Card>

@@ -5,6 +5,7 @@ from models import db, User, Plant, Landscaper, Project
 from config import app, db, api, mail
 from flask_mail import Message
 
+# Checks Authentication
 @app.before_request
 def check_credentials():
     if request.path.startswith('/static/'):
@@ -17,6 +18,7 @@ def check_credentials():
         print(session)
         pass
 
+# All users
 class Users(Resource):
     def get(self):
         au = User.query.all()
@@ -45,6 +47,7 @@ class Users(Resource):
 
 api.add_resource(Users, '/users')
 
+# All plants
 class Plants(Resource):
     def get(self):
         ap = Plant.query.all()
@@ -52,6 +55,7 @@ class Plants(Resource):
     
 api.add_resource(Plants, '/plants')
 
+# All Landscapers
 class Landscapers(Resource):
     def get(self):
         al = Landscaper.query.all()
@@ -81,6 +85,7 @@ class Landscapers(Resource):
     
 api.add_resource(Landscapers, '/landscapers')
 
+# One Landscaper
 class OneLandscaper(Resource):
     def get(self, id):
         landscaper = Landscaper.query.filter(Landscaper.id == id).first()
@@ -93,6 +98,7 @@ class OneLandscaper(Resource):
 
 api.add_resource(OneLandscaper, '/landscapers/<int:id>')
 
+# All Projects
 class Projects(Resource):
     def get(self):
         ap = Project.query.all()
@@ -121,6 +127,7 @@ class Projects(Resource):
         
 api.add_resource(Projects, '/projects')
 
+# One Project
 class OneProject(Resource):
     def get(self, id):
         project = Project.query.filter(Project.id == id).first()
@@ -167,6 +174,7 @@ class OneProject(Resource):
 
 api.add_resource(OneProject, '/project/<int:id>')
 
+# Add item to project and delete
 class ItemToProject(Resource):
     def post(self, id):
         try:
@@ -206,6 +214,7 @@ class ItemToProject(Resource):
 
 api.add_resource(ItemToProject, '/project/<int:id>/plant')
 
+# Add item to project and delete
 class AddlandscaperToProject(Resource):
     def post(self, project_id):
         try:
@@ -243,6 +252,7 @@ class AddlandscaperToProject(Resource):
         
 api.add_resource(AddlandscaperToProject, '/project/<int:project_id>/landscaper')
 
+# Login user
 class LoginUser(Resource):
     def post(self):
         data = request.get_json()
@@ -258,6 +268,7 @@ class LoginUser(Resource):
         
 api.add_resource(LoginUser, '/login_user')
 
+# Login landscaper
 class LoginLandscaper(Resource):
     def post(self):
         data = request.get_json()
@@ -273,12 +284,14 @@ class LoginLandscaper(Resource):
            
 api.add_resource(LoginLandscaper, '/login_landscaper')
 
+# Logout
 class Logout(Resource):
     def delete(self):
         session.clear()
         return {}
 api.add_resource(Logout,'/logout')
 
+# Check if user is logged in
 class CheckSession(Resource):
     def get(self):
         print(session)
@@ -293,6 +306,7 @@ class CheckSession(Resource):
         
 api.add_resource(CheckSession,'/checksessions')
 
+# Send email
 class SendEmail(Resource):
     def post(self):
         try:
