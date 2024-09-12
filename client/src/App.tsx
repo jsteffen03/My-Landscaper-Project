@@ -99,7 +99,7 @@ function App() {
   }
 
   return (
-    <div className="body2">
+    <div className="body">
       <BrowserRouter>{routes}</BrowserRouter>
     </div>
   );

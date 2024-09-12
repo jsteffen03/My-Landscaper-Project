@@ -81,7 +81,7 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
     })
 
     return(
-        <ItemGroup divided>
+        <ItemGroup divided className='ProjectCard'>
             <Item>
                 <ItemContent>
                     <ItemHeader>{project.title}</ItemHeader>
@@ -93,25 +93,26 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
                         <span>{landscapers?.length ? landscapers : "No Landscapers can view this project"}</span>
                     </ItemMeta>
                     <ItemDescription>Description: {project.description}</ItemDescription>
-                    <Button primary floated="right" onClick={editProject}>Edit</Button>
-                    <Button primary floated="right" onClick={deleteProject}>Delete</Button>
-                    <Button primary floated="right" onClick={() => setSendingEmail(!sendingEmail)}>{sendingEmail ? "Cancel" : "Send Email"}</Button>
+                    <Button floated="right" color="black" onClick={editProject}>Edit</Button>
+                    <Button floated="right" color="red" onClick={deleteProject}>Delete</Button>
+                    {sendingEmail ? <></>: <Button floated="right" color="black" onClick={() => setSendingEmail(!sendingEmail)}>Send Email</Button>}
+                    {sendingEmail ? 
+                    <Form>                    
+                        <FormField>
+                            <label>Company</label>
+                            <input placeholder='Company' value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
+                        </FormField>
+                        <FormField>
+                            <label>Email Address</label>
+                            <input placeholder='Email Address' value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)}/>
+                        </FormField>
+                        <Button floated="right" color="red" onClick={() => setSendingEmail(!sendingEmail)}>Cancel</Button>
+                        <Button primary floated="right" onClick={sendEmail}>Send</Button>
+                    </Form>
+                    : 
+                    null} 
                 </ItemContent>
             </Item>
-                {sendingEmail ? 
-                <Form>                    
-                    <FormField>
-                        <label>Company</label>
-                        <input placeholder='Company' value={companyName} onChange={(e) => setCompanyName(e.target.value)}/>
-                    </FormField>
-                    <FormField>
-                        <label>Email Address</label>
-                        <input placeholder='Email Address' value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)}/>
-                    </FormField>
-                    <Button primary floated="right" onClick={sendEmail}>Send</Button>
-                </Form>
-                : 
-                null}              
         </ItemGroup>
     )
 }

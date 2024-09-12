@@ -93,9 +93,11 @@ function LoginUser({ setUser }: LoginUserProps) {
     }
 
     return(
-        <div className="body">
-            <h1 className="Title">My Landscaper</h1>
-            <div className="Container"> 
+        <div className="body-login">
+            <div className="img-container">
+                <img  alt="logo" src="./src/assets/Logo.png"/>
+            </div>
+            <div className="login-container"> 
                 <Form className="Login" onSubmit={(e)=>handleLogin(e)}>
                     <h1>Login</h1>
                     <FormField>

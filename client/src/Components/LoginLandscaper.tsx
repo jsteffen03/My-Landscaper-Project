@@ -96,51 +96,53 @@ function LoginLandscaper({ setLandscaper }: LoginLandscaperProps) {
     }
 
     return(
-        <div className="body">
-        <h1 className="Title">My Landscaper</h1>
-        <div className="Container"> 
-            <Form className="Login"  onSubmit={(e)=>handleLogin(e)}>
-                <h1>Login</h1>
-                <FormField>
-                    <label>Email</label>
-                    <input placeholder='Email' autoComplete="email" onChange={(e)=>setEmail(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Password</label>
-                    <input placeholder='Password' type="password" autoComplete="current-password" onChange={(e)=>setPassword(e.target.value)}/>
-                </FormField>
-                <div className="Button">
-                    <Button color='green' type="submit">Login Landscaper</Button>
-                    <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Remember Me" : "Don't Remember Me"}</Button>
-                </div>
-            </Form>
-            <Form className="CreateAccount" onSubmit={(e)=>addLandscaper(e)}>
-                <h1>Create Account</h1>
-                <FormField>
-                    <label>Name</label>
-                    <input placeholder='Name' onChange={(e)=>setName(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Company Name</label>
-                    <input placeholder='Company Name' onChange={(e)=>setCompany(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Email</label>
-                    <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Password</label>
-                    <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
-                </FormField>
-                <FormField>
-                    <label>Verify Password</label>
-                    <input placeholder='Password' type="password" onChange={(e)=>setCPassword(e.target.value)}/>
-                </FormField>
-                <div className="Button">
-                    <Button color='green' type="submit">Create a Landscaper Acount</Button>
-                </div>
-            </Form>
-        </div>
+        <div className="body-login">
+            <div className="img-container">
+                <img  alt="logo" src="./src/assets/Logo.png"/>
+            </div>
+            <div className="login-container"> 
+                <Form className="Login"  onSubmit={(e)=>handleLogin(e)}>
+                    <h1>Login</h1>
+                    <FormField>
+                        <label>Email</label>
+                        <input placeholder='Email' autoComplete="email" onChange={(e)=>setEmail(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Password</label>
+                        <input placeholder='Password' type="password" autoComplete="current-password" onChange={(e)=>setPassword(e.target.value)}/>
+                    </FormField>
+                    <div className="Button">
+                        <Button color='green' type="submit">Login Landscaper</Button>
+                        <Button toggle active={sLI} onClick={() => setSLI(!sLI)} type="button">{sLI === true ? "Remember Me" : "Don't Remember Me"}</Button>
+                    </div>
+                </Form>
+                <Form className="CreateAccount" onSubmit={(e)=>addLandscaper(e)}>
+                    <h1>Create Account</h1>
+                    <FormField>
+                        <label>Name</label>
+                        <input placeholder='Name' onChange={(e)=>setName(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Company Name</label>
+                        <input placeholder='Company Name' onChange={(e)=>setCompany(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Email</label>
+                        <input placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Password</label>
+                        <input placeholder='Password' type="password" onChange={(e)=>setPassword(e.target.value)}/>
+                    </FormField>
+                    <FormField>
+                        <label>Verify Password</label>
+                        <input placeholder='Password' type="password" onChange={(e)=>setCPassword(e.target.value)}/>
+                    </FormField>
+                    <div className="Button">
+                        <Button color='green' type="submit">Create a Landscaper Acount</Button>
+                    </div>
+                </Form>
+            </div>
         </div>
     )
 }       

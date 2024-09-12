@@ -107,15 +107,21 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
     
     return (
         <div className="container">
-            <div className="Header"> 
-                <h1>My Landscaper - Plants</h1>
-                <Button color='black' onClick={()=>navigate('/project_page')}>Back to Project</Button>
-            </div> 
-            <div className="Content2">
-                <div className="addPlant">
+            <div className="Header">
+                <div className="logo-welcome">
+                    <div className="img-container-user">
+                        <img className="logo" alt="logo" src="./src/assets/Logo.png" />
+                    </div>
+                    <h1 className='welcome'>Item Search</h1>                 
+                </div>                 
+                <h2 className="site-name">My Landscaper</h2>
+                <Button color='black' size='huge' onClick={()=>navigate('/project_page')}>Back to Project</Button>
+            </div>
+            <div className="Content">
+                <div className="ProjectDetails">
                     <Form onSubmit={(e)=>handleSearch(e)}>
-                        <h2>Search</h2> 
-                        <Button color='black' type="submit" >Search</Button>
+                        <h2 className="PHeader">Search</h2> 
+                        <Button floated='right' color='black' type="submit" >Search</Button>
                         <FormField>
                             <label>Plant Name</label>
                             <input type="text" placeholder="Plant Name" onChange={(e)=>setSearch(e.target.value)}></input>
@@ -128,7 +134,7 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
                         />
                     </Form>
                 </div>
-                <div className="plants">
+                <div className="ProjectPlants">
                     <Card.Group>
                         {plantRender}
                     </Card.Group>

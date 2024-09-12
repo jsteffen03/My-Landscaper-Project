@@ -106,27 +106,32 @@ function ProjectPage({ projectId, projectPlants, setProjectPlants }: ProjectPage
     return (
         <div className="container">
             <div className="Header">
-                <h2>{project?.title}</h2>
-                <h1>My Landscaper</h1>
-                <Button color="black" onClick={() => navigate('/user_page')}>Home</Button>
+                <div className="logo-welcome">
+                    <div className="img-container-user">
+                        <img className="logo" alt="logo" src="./src/assets/Logo.png" />
+                    </div>
+                <h2 className='welcome'>{project?.title}</h2>                   
+                </div>
+                <h1 className="site-name">My Landscaper</h1>
+                <Button size="huge" color="black" onClick={() => navigate('/user_page')}>Home</Button>
             </div>
             <div className="Content">
-                <div className="MyProjects">
+                <div className="ProjectDetails">
                     {!isEditing ? (
                         <div>
-                            <h2>Project Description</h2>
-                            <p>{project?.description}</p>
-                            <h2>Project Status</h2>
-                            <p>{project?.status}</p>
-                            <Button color="blue" onClick={() => setIsEditing(true)}>Edit Project</Button>
-                            <h2>Number of Plants</h2>
-                            <p>Total: {plantNum}</p>
-                            <p>Flowering Trees: {floweringTreesCount}</p>
-                            <p>Shade Trees: {shadeTreesCount}</p>
-                            <p>Evergreen Trees: {evergreenTreesCount}</p>
+                            <h2 className="PHeader">Project Description</h2>
+                            <p className='Description'>{project?.description}</p>
+                            <h2 className="PHeader">Project Status</h2>
+                            <p className='Description2'>{project?.status}</p>
+                            <Button color="black" onClick={() => setIsEditing(true)}>Edit Project</Button>
+                            <h2 className="PHeader">Number of Plants</h2>
+                            <p className='Description2'>Total: {plantNum}</p>
+                            <p className='Description2'>Flowering Trees: {floweringTreesCount}</p>
+                            <p className='Description2'>Shade Trees: {shadeTreesCount}</p>
+                            <p className='Description2'>Evergreen Trees: {evergreenTreesCount}</p>
                         </div>
                     ) : (
-                        <Form className="EditForm">
+                        <Form>
                             <Form.Field>
                                 <label>Title</label>
                                 <Input
@@ -149,9 +154,9 @@ function ProjectPage({ projectId, projectPlants, setProjectPlants }: ProjectPage
                     )}
                 </div>
                 <div className="ProjectPlants">
-                    <div className="Button">
-                        <h2>Project Plants</h2>
-                        <Button color='green' onClick={() => navigate('/item_search')}>Add Plants</Button>
+                    <div className='ProjectPlantsHeader'>
+                        <h2 className="Title2" >Project Plants</h2>
+                        <Button floated='right' color='black' onClick={() => navigate('/item_search')}>Add Plants</Button>
                     </div>
                     <Card.Group>
                         {plantRender}

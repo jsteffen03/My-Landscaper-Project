@@ -95,27 +95,30 @@ function UserPage({ setUser, user, setProjectId }: UserPageProps) {
     ));
 
     return (
-        <div className="container">
+        <div className="user-home">
             <div className="Header">
-                <h2>Welcome {user.name}</h2>
-                <h1>My Landscaper</h1>
-                <Button color="black" onClick={handleLogout}>Log Out</Button>
+                <div className="logo-welcome">
+                <div className="img-container-user">
+                    <img className="logo" alt="logo" src="./src/assets/Logo.png" />
+                </div>
+                <h2 className='welcome'>Welcome,  {user.name}</h2>
+                </div>
+                <h1 className="site-name">My Landscaper</h1>
+                <Button size="huge" color="black" onClick={handleLogout}>Log Out</Button>
             </div>
             <div className="Content">
-                <div className="ProjectPlants">
-                    <div className="Button">
-                        <h2>My Projects</h2>
-                    </div>
+                <div className="Projects">
+                    <h2 className='Title'>My Projects</h2>
                     <div>
                         {projectRender}
                     </div>
                 </div>
-                <div className="MyProjects">
+                <div className="NewProjects">
                     <Form onSubmit={addProject}>
-                        <h2>New Project</h2>
-                        <Button color='black' type='submit'>Submit</Button>
+                        <h2 className='Title'>New Project</h2>
+                        <Button color='black' floated='right' type='submit'>Submit</Button>
                         <FormField>
-                            <label>Project Name</label>
+                            <p className='label'>Project Title</p>
                             <input
                                 type="text"
                                 value={newPTitle}
@@ -124,7 +127,7 @@ function UserPage({ setUser, user, setProjectId }: UserPageProps) {
                             />
                         </FormField>
                         <FormField>
-                            <label>Project Details</label>
+                            <p className='label' >Project Details</p>
                             <FormTextArea
                                 value={newPDescription}
                                 placeholder="Please give a detailed description of your project"
@@ -132,8 +135,8 @@ function UserPage({ setUser, user, setProjectId }: UserPageProps) {
                             />
                         </FormField>
                     </Form>
-                    <div>
-                        <h4>Things to include in your project details:</h4>
+                    <div className='Instructions'>
+                        <h2>Things to include in your project details:</h2>
                         <ul>                            
                             <li>What is your vision?</li>
                             <li>What area of your yard are you landscaping?</li>
