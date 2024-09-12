@@ -4,7 +4,6 @@ from sqlalchemy_serializer import SerializerMixin
 from config import db, bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
 
-# Models go here!
 class Plant(db.Model, SerializerMixin):
     __tablename__ = 'plants'
     
@@ -26,7 +25,7 @@ class Project(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
-    status = db.Column(db.String, nullable=False)
+    status = db.Column(db.String)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
@@ -87,6 +86,7 @@ class Landscaper(db.Model, SerializerMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
+    company = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     _password_hash = db.Column(db.String, nullable=False)
     
@@ -113,11 +113,18 @@ class Landscaper(db.Model, SerializerMixin):
     @validates('email')
     def validate_email(self, key, address):
         if '@' in address:
-            return address           
+            return address
         else:
             raise ValueError('Invalid email format')
 
     
+    @validates('company')
+    def validate_name(self, key, company):
+        if len(company) > 3:
+            return company
+        else:
+            raise ValueError('Company Name must be at least 3 characters long')
+        
     @validates('name')
     def validate_name(self, key, name):
         if len(name) > 3:

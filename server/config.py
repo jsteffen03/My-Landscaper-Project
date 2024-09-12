@@ -1,12 +1,13 @@
 # Remote library imports
 from flask import Flask
+from flask_mail import Mail
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
-from flask_bcrypt import Bcrypt
 import os
+from flask_bcrypt import Bcrypt 
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -36,3 +37,16 @@ bcrypt = Bcrypt(app)
 
 app.secret_key = os.getenv('SECRET_KEY')
 # python -c 'import os; print(os.urandom(24))'
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_DEBUG'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_MAX_EMAILS'] = 5
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
+mail = Mail(app)
