@@ -5,7 +5,7 @@ from flask import url_for
 
 with app.app_context():
 
-    # Delete all data
+    # Delete all exsiting data
     print("deleting all data")
     db.session.query(Plant).delete()
     db.session.query(Landscaper).delete()
@@ -52,28 +52,9 @@ with app.app_context():
 
 
     plants = [plant1, plant2, plant3, plant4, plant5, plant6, plant7, plant8, plant9, plant10, plant11, plant12, plant13, plant14, plant15, plant16, plant17, plant18, plant19, plant20, plant21, plant22, plant23, plant24, plant25, plant26, plant27, plant28, plant29, plant30, plant31]
-
-
-
-    
-    # Create a new user
-    user = User(name='John Doe', email='john.doe@example.com', password_hash='securepassword')
-    
-    # Create a new landscaper
-    landscaper = Landscaper(name='Jane Smith', company='ABC Company', email='jane.smith@example.com', password_hash='securepassword')
-    
-    # Create a new project
-    project = Project(title='Garden Renovation', description='Renovate the backyard garden.', status='In Progress', user=user)
-    
-    # Add the plant and landscaper to the project
-    project.plants.append(plants[0])
-    project.landscapers.append(landscaper)
     
     # Add all instances to the session
     db.session.add_all(plants)
-    db.session.add(user)
-    db.session.add(landscaper)
-    db.session.add(project)
     
     # Commit the transaction
     db.session.commit()
