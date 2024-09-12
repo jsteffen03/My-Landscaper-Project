@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {ItemMeta, ItemHeader, ItemGroup, ItemDescription,ItemContent,Button,Item, Form, FormField} from 'semantic-ui-react'
 import { User, Project } from '../types';
+import { confirmAlert } from 'react-confirm-alert'
 
 interface ProjectCardProps {
     project: Project;
@@ -38,6 +39,23 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
         });
     }
 
+    function showDeleteConfirmation() {
+        confirmAlert({
+            title: 'Confirm to Delete Project',
+            message: 'Are you sure you want to delete this project?',
+            buttons: [
+                {
+                    label: 'Delete Project',
+                    onClick: deleteProject 
+                },
+                {
+                    label: 'Cancel',
+                    onClick: () => {}
+                }
+            ],
+        });
+    }
+
     function editProject(){
         setProjectId(project.id)
         sessionStorage.setItem('projectId', project.id.toString())
@@ -65,6 +83,35 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
             setSendingEmail(false)
             setCompanyName("")
             setEmailAddress("")
+        })
+        .then(()=>{
+            const updatedProject: Partial<Project> = {};
+            updatedProject.status = "Email Sent - Awaiting Confirmation";
+            fetch(`/api/project/${project.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedProject),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update project');
+                }
+                return response.json();
+            })
+            .then(updatedData => {
+                const updatedProjects = projectData.map(proj => {
+                    if (proj.id === updatedData.id) {
+                        return updatedData;
+                    }
+                    return proj;
+                });
+                setProjectData(updatedProjects);
+            })
+            .catch(error => {
+                console.error('Error updating project:', error);
+            })
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -94,7 +141,7 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
                     </ItemMeta>
                     <ItemDescription>Description: {project.description}</ItemDescription>
                     <Button floated="right" color="black" onClick={editProject}>Edit</Button>
-                    <Button floated="right" color="red" onClick={deleteProject}>Delete</Button>
+                    <Button floated="right" color="red" onClick={showDeleteConfirmation}>Delete</Button>
                     {sendingEmail ? <></>: <Button floated="right" color="black" onClick={() => setSendingEmail(!sendingEmail)}>Send Email</Button>}
                     {sendingEmail ? 
                     <Form>                    
@@ -107,7 +154,7 @@ function ProjectCard({project, projectData, setProjectData, setProjectId, user}:
                             <input placeholder='Email Address' value={emailAddress} onChange={(e) => setEmailAddress(e.target.value)}/>
                         </FormField>
                         <Button floated="right" color="red" onClick={() => setSendingEmail(!sendingEmail)}>Cancel</Button>
-                        <Button primary floated="right" onClick={sendEmail}>Send</Button>
+                        <Button floated="right" color="black" onClick={sendEmail}>Send</Button>
                     </Form>
                     : 
                     null} 

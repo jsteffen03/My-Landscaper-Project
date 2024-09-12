@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import {Button, Card, List} from 'semantic-ui-react'
+import {Button, Card, Form, Input} from 'semantic-ui-react'
 import LSelectedPlantCard from './LSelectedPlantCard.tsx'
 import { Project,  Plant } from '../types';
 
@@ -18,6 +18,8 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPage
     const [floweringTreesCount, setFloweringTreesCount] = useState<number>(0);
     const [shadeTreesCount, setShadeTreesCount] = useState<number>(0);
     const [evergreenTreesCount, setEvergreenTreesCount] = useState<number>(0);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [newStatus, setNewStatus] = useState<string>('');
 
     useEffect(() => {
         if (projectId != 0) {
@@ -62,6 +64,38 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPage
         }
     }, [projectPlants])
 
+    const handleEditSubmit = () => {
+        const updatedProject: Partial<Project> = {};
+        if (newStatus !== project?.status) {
+            updatedProject.status = newStatus;
+        }
+        if (Object.keys(updatedProject).length === 0) {
+            setIsEditing(false);
+            return;
+        }
+        fetch(`/api/project/${projectId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedProject),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update project');
+            }
+            return response.json();
+        })
+        .then(updatedData => {
+            setProject(updatedData);
+            setIsEditing(false);
+        })
+        .catch(error => {
+            console.error('Error updating project:', error);
+        })
+    }
+
+
     const plantRender = projectPlants.map(plant => (
         <LSelectedPlantCard 
             key={plant.id}
@@ -72,25 +106,48 @@ function LProjectPage({projectId, projectPlants, setProjectPlants}: LProjectPage
     return(
         <div className="container">
             <div className="Header">
-            <h2>{project?.title} - {project?.user?.name} - {project?.id}</h2>
-                <h1>My Landscaper</h1>
-                <Button color="black" onClick={()=>navigate('/user_page')}>Home</Button> 
+            <   div className="logo-welcome">
+                    <div className="img-container-user">
+                        <img className="logo" alt="logo" src="./src/assets/Logo.png" />
+                    </div>
+                    <h2 className='welcome'>{project?.title} - {project?.user?.name}</h2>                   
+                </div>
+                <h1 className="site-name">My Landscaper</h1>
+                <Button size="huge" color="black" onClick={()=>navigate('/user_page')}>Home</Button> 
             </div> 
             <div className="Content">
-                <div className="MyProjects">
-                    <h2>Project Desription</h2>
-                    <List.Description>{project?.description}</List.Description>
-                    <h2>Project Status</h2>
-                    <p>{project?.status}</p>
-                    <h2>Number of Plants</h2>
-                    <p>Total: {plantNum}</p>
-                    <p>Flowering Trees: {floweringTreesCount}</p>
-                    <p>Shade Trees: {shadeTreesCount}</p>
-                    <p>Evergreen Trees: {evergreenTreesCount}</p>
+                <div className="ProjectDetails">
+                    {!isEditing ? (
+                        <div>
+                        <h2 className="PHeader">Project Desription</h2>
+                        <p className='Description2'>{project?.description}</p>
+                        <h2 className="PHeader">Project Status</h2>
+                        <p className='Description2'>{project?.status}</p>
+                        <Button color="black" onClick={() => setIsEditing(true)}>Change Status</Button>
+                        <h2 className="PHeader">Number of Plants</h2>
+                        <p className='Description2'>Total: {plantNum}</p>
+                        <p className='Description2'>Flowering Trees: {floweringTreesCount}</p>
+                        <p className='Description2'>Shade Trees: {shadeTreesCount}</p>
+                        <p className='Description2'>Evergreen Trees: {evergreenTreesCount}</p>
+                        </div>
+                    ): (
+                    <Form>
+                        <Form.Field>
+                            <label>Status</label>
+                            <Input
+                                value={newStatus}
+                                onChange={(e) => setNewStatus(e.target.value)}
+                                placeholder={project?.status}
+                            />
+                        </Form.Field>
+                        <Button color="green" onClick={handleEditSubmit}>Save Changes</Button>
+                        <Button color="red" onClick={() => setIsEditing(false)}>Cancel</Button>
+                    </Form>
+                    )}
                 </div>
                 <div className="ProjectPlants">
-                    <div className="Button">
-                        <h2>Project Plants</h2>
+                <div className='ProjectPlantsHeader'>
+                    <h2 className="Title2" >Project Plants</h2>
                     </div> 
                     <Card.Group>
                         {plantRender}

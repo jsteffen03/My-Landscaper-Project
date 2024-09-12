@@ -4,14 +4,14 @@ export type Plant = {
     scientific_name: string;
     type: string;
     img?: string;
-    projects?: Project[]; // Relation to projects through join table
+    projects?: Project[]; // Many-to-many relationship with projects
 };
   
 export  type User = {
     id: number;
     name: string;
     email: string;
-    password?: string; // Exclude password from most types to maintain security
+    password?: string; 
     projects: Project[]; // One-to-many relationship with projects
 };
   
@@ -20,7 +20,7 @@ export  type Landscaper = {
     name: string;
     company: string;
     email: string;
-    password?: string; // Exclude password from most types to maintain security
+    password?: string; 
     projects: Project[]; // Many-to-many relationship with projects
 };
   
@@ -30,7 +30,7 @@ export  type Project = {
     description?: string;
     status: string;
     user_id: number;
-    user?: User; // The User who owns this project
+    user?: User; 
     plants?: Plant[]; // Many-to-many relationship with plants
     landscapers?: Landscaper[]; // Many-to-many relationship with landscapers
 };

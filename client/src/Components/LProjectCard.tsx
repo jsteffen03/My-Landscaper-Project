@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import {ItemMeta,ItemHeader,ItemGroup,ItemDescription,ItemContent,Button,Item} from 'semantic-ui-react'
 import { Project } from '../types';
+import { confirmAlert } from 'react-confirm-alert';
 
 interface LProjectCardProps {
     project: Project;
@@ -45,8 +46,25 @@ function LProjectCard({ project, setProjectId, landProject, setLandProject, land
         });
     }
 
+    function showDeleteConfirmation() {
+        confirmAlert({
+            title: 'Confirm to Delete Project',
+            message: 'Are you sure you want to delete this project?',
+            buttons: [
+                {
+                    label: 'Delete Project',
+                    onClick: deleteProject 
+                },
+                {
+                    label: 'Cancel',
+                    onClick: () => {}
+                }
+            ],
+        });
+    }
+
     return(
-        <ItemGroup divided>
+        <ItemGroup divided className='ProjectCard'>
             <Item>
             <ItemContent>
                 <ItemHeader>{project.title} - {project.user?.name}</ItemHeader>
@@ -54,10 +72,10 @@ function LProjectCard({ project, setProjectId, landProject, setLandProject, land
                     <span>{project.status}</span>
                 </ItemMeta>
                 <ItemDescription>{project.description}</ItemDescription>
-                <Button primary floated="right" onClick={editProject}>
+                <Button color='black' floated="right" onClick={editProject}>
                     View
                 </Button>
-                <Button primary floated="right" onClick={deleteProject}>
+                <Button color='red' floated="right" onClick={showDeleteConfirmation}>
                     Delete
                 </Button>
             </ItemContent>

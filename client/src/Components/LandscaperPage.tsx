@@ -74,6 +74,37 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
                 console.error('There was a problem with the second fetch:', error);
             });
         })
+        .then(()=>{
+            const updatedProject: Partial<Project> = {};
+            updatedProject.status = "Viewed";
+            fetch(`/api/project/${newPID}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedProject),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update project');
+                }
+                return response.json();
+            })
+            .then(updatedData => {
+                setLandProject((prevProjects) => {
+                    const updatedIndex = prevProjects.findIndex(proj => proj.id === updatedData.id);
+                    if (updatedIndex !== -1) {
+                        const newProjects = [...prevProjects];
+                        newProjects[updatedIndex] = updatedData;
+                        return newProjects;
+                    }
+                    return prevProjects; 
+                });
+            })
+            .catch(error => {
+                console.error('Error updating project:', error);
+            })
+        })
         .catch(error => {
             console.error('There was a problem with the fetch:', error);
         });
@@ -93,24 +124,27 @@ function LandscaperPage({setLandscaper, landscaper, setProjectId}: LandscaperPag
     return(
         <div className="container">
             <div className="Header">
-                <h2>Welcome {landscaper?.name}</h2>
-                <h1>My Landscaper</h1>
-                <Button color="black" onClick={handleLogout}>Log Out</Button> 
-            </div> 
+                <div className="logo-welcome">
+                <div className="img-container-user">
+                    <img className="logo" alt="logo" src="./src/assets/Logo.png" />
+                </div>
+                <h2 className='welcome'>Welcome,  {landscaper?.name}</h2>
+                </div>
+                <h1 className="site-name">My Landscaper</h1>
+                <Button size="huge" color="black" onClick={handleLogout}>Log Out</Button>
+            </div>
             <div className="Content">
-                <div className="ProjectPlants">
-                    <div className="Button">
-                        <h2>My Projects</h2>
-                    </div>
+                <div className="LandscaperProjects">
+                    <h2 className='Title'>My Projects</h2>
                     <div>
                         {projectRender} 
                     </div>
                     <div>
-                        <h2>Project</h2>
+                        <h2 className='PHeader'>Add Project from Email</h2>
                         <Form onSubmit={(e)=>addProject(e)}>
                             <FormField>
                                 <label>Project ID</label>
-                                <input placeholder="Project ID - Enter a ID from Email" onChange={(e)=>setNewPID(parseInt(e.target.value))}/>
+                                <input placeholder="Enter the Project ID from Email" onChange={(e)=>setNewPID(parseInt(e.target.value))}/>
                             </FormField>
                             <Button color='black' type='submit'>Receive Project</Button>
                         </Form>

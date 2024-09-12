@@ -135,6 +135,9 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
                     </Form>
                 </div>
                 <div className="ProjectPlants">
+                    <div className='ProjectPlantsHeader'>
+                        <h2 className="Title2" >Plants</h2>
+                    </div>
                     <Card.Group>
                         {plantRender}
                     </Card.Group>
