@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'  
 import { FormField, Button, Form } from 'semantic-ui-react'
-import { User, Plant, Landscaper } from '../types';
+import { Landscaper } from '../types';
 
 type NewLandscaper = {
     name: string;
