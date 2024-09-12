@@ -13,6 +13,9 @@ flask-restful = "*"
 flask-cors = "*"
 flask-bcrypt = "*"
 python-dotenv = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
+flask-mail = "*"
 
 [requires]
 python_full_version = "3.8.13"
