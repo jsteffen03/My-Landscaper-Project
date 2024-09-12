@@ -126,7 +126,7 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
                             <label>Plant Name</label>
                             <input type="text" placeholder="Plant Name" onChange={(e)=>setSearch(e.target.value)}></input>
                         </FormField>
-                        <FormSelect onChange={(e, { value })=>setFilter(value)}
+                        <FormSelect onChange={(_, { value }) => setFilter(value)} 
                             fluid
                             label='Select Type'
                             options={options}
