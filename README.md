@@ -5,6 +5,7 @@ My-Landscaper is the capstone project from my time at Flatiron School. This appl
 
 Follow along for updates as I work to improve the user interface, database, and API, until the end of time. 
 
+Link to video walkthrough - "https://www.youtube.com/watch?v=o6KjVZ7VPgM" 
 ---
 
 ## Table of Contents
