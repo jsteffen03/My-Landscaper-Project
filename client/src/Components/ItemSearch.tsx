@@ -13,13 +13,13 @@ interface ItemSearchProps {
 function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchProps) {
 
     const navigate = useNavigate();
-    const [plants, setPlants] = useState<Plant[]>([])
-    const [newProjectPlants, setNewProjectPlants] = useState<Plant[]>(projectPlants)
-    const [filteredPlants, setFilteredPlants] = useState<Plant[]>([])
-    const [search, setSearch] = useState<string>("")
-    const [filter, setFilter] = useState<any>("")
+    const [plants, setPlants] = useState<Plant[]>([])//all plants
+    const [newProjectPlants, setNewProjectPlants] = useState<Plant[]>(projectPlants)//project plants
+    const [filteredPlants, setFilteredPlants] = useState<Plant[]>([])//filtered plants
+    const [search, setSearch] = useState<string>("")//sets search string
+    const [filter, setFilter] = useState<any>("")//sets filter type
 
-    useEffect(() => {
+    useEffect(() => { // Gets all project plants
         if (projectId != 0) {
             fetch(`/api/project/${projectId}`)
             .then(r=>{
@@ -39,7 +39,7 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
         }
     }, [newProjectPlants])
 
-    useEffect(() => {
+    useEffect(() => { //Gets all plants
         fetch('/api/plants')
         .then(r=>{
             if(r.ok){
@@ -58,7 +58,7 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
         });
     }, [])
 
-    function handleSearch(e?: React.FormEvent<HTMLFormElement>){
+    function handleSearch(e?: React.FormEvent<HTMLFormElement>){ //Search for plants by type or name
         if (e) e.preventDefault()
         setFilteredPlants(plants.filter((plant)=>{
             if (search === "" && filter === "") {
@@ -83,7 +83,7 @@ function ItemSearch({ projectId, projectPlants, setProjectPlants }: ItemSearchPr
         }))
     }
 
-    const options: any = [
+    const options: any = [ // option for plant types
         { key: 'a', text: '--Select--', value: '' },
         { key: 'f', text: 'Flowering Tree', value: 'Flowering Tree' },
         { key: 's', text: 'Shade Tree', value: 'Shade Tree' },
