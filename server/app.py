@@ -6,17 +6,17 @@ from config import app, db, api, mail
 from flask_mail import Message
 
 # Checks Authentication
-# @app.before_request
-# def check_credentials():
-#     if request.path.startswith('/static/'):
-#         return None
+@app.before_request
+def check_credentials():
+    if request.path.startswith('/static/'):
+        return None
 
-#     valid_routes = ("/checksessions","/login_user", "/login_landscaper","/landscapers", "/users", "/")
-#     if request.path not in valid_routes and 'user_id' not in session and 'landscaper_id' not in session:
-#         return {"error": "please login"},401
-#     else:
-#         print(session)
-#         pass
+    valid_routes = ("/checksessions","/login_user", "/login_landscaper","/landscapers", "/users", "/")
+    if request.path not in valid_routes and 'user_id' not in session and 'landscaper_id' not in session:
+        return {"error": "please login"},401
+    else:
+        print(session)
+        pass
 
 # All users
 class Users(Resource):
@@ -409,9 +409,9 @@ class SendEmail(Resource):
         
 api.add_resource(SendEmail, '/send_email')
 
-@app.errorhandler(404)
-def not_found(e):
-    return render_template("index.html")
+# @app.errorhandler(404)
+# def not_found(e):
+#     return render_template("index.html")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

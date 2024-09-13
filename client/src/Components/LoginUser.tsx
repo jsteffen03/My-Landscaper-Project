@@ -41,7 +41,7 @@ function LoginUser({ setUser }: LoginUserProps) {
                 return r.json()
             }
             else {
-                throw new Error('Failed to post data.')
+                throw new Error('Failed to login.')
             }
         })
         .then(data=>{
@@ -66,7 +66,7 @@ function LoginUser({ setUser }: LoginUserProps) {
                 return r.json()
             }
             else {
-                throw new Error('Failed to post data.')
+                throw new Error('Failed to post new user')
             }
         })
         .then(()=>{
